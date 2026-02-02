@@ -1,6 +1,8 @@
 import { Routes, Route } from "react-router-dom";
 import TurfDetail from "./pages/SingleTurf";
 import TurfPage from "./pages/Turfs"
+import AuthPage from "./pages/Auth/AuthPage";
+import BookingDetail from "./pages/BookingDetail";
 
 export default function App() {
   return (
@@ -8,6 +10,7 @@ export default function App() {
       <Route path="/turf/:id" element={<TurfDetail />} />
       <Route path="/turfs" element={<TurfPage />} />
       <Route path="/login" element={<AuthPage />} />
+      <Route path="/booking/:id" element={<BookingDetail />} />
     </Routes>
   );
 }

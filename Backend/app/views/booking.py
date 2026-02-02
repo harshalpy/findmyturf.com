@@ -70,10 +70,9 @@ class BookingDetailView(APIView):
 
         serializer = BookingDetailSerializer(booking)
         return Response(serializer.data)
-    
 
-class BookingByTurf(ListAPIView):
+class GetBookingById(ListAPIView):
     serializer_class = BookingSerializer
 
     def get_queryset(self):
-        return Booking.objects.filter(turf=self.kwargs["turf_id"])
+        return Booking.objects.filter(id=self.kwargs["booking_id"])

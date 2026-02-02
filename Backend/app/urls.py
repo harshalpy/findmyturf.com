@@ -3,7 +3,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 
 from app.views.auth import UserRegisterView, OwnerRegisterView
 from app.views.turf import TurfCreateView, TurfUpdateView, TurfListView
-from app.views.booking import BookingCreateView, MyBookingsView, CancelBookingView , BookingByTurf
+from app.views.booking import BookingCreateView, MyBookingsView, CancelBookingView , GetBookingById
 from app.views.availability import TurfAvailableSlotsView
 from app.views.payment import ConfirmPaymentView
 from app.views.turf_image import TurfImageUploadView, SetDefaultTurfImageView, DeleteTurfImageView
@@ -24,7 +24,7 @@ urlpatterns = [
     path('turf/list/', TurfListView.as_view()),
 
     # Booking
-    path('booking/<uuid:turf_id>/', BookingByTurf.as_view()),
+    path('booking/<uuid:booking_id>/', GetBookingById.as_view()),
     path('booking/create/', BookingCreateView.as_view()),
     path('booking/my/', MyBookingsView.as_view()),
     path('booking/<uuid:booking_id>/cancel/', CancelBookingView.as_view()),

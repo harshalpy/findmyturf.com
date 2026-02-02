@@ -19,14 +19,20 @@ export default function Turfs() {
 
     const [page, setPage] = useState(1);
     const [count, setCount] = useState(0);
-    const pageSize = 6;
+    const [hasNext, setHasNext] = useState(false);
+    const [hasPrev, setHasPrev] = useState(false);
 
+    const PAGE_SIZE = 9; // must match backend PAGE_SIZE
+
+    // Reset page when filters or location change
     useEffect(() => {
         setPage(1);
     }, [filters, location.lat]);
 
+    // Fetch data whenever page / filters / location change
     useEffect(() => {
         fetchTurfs();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [page, filters, location.lat]);
 
     async function fetchTurfs() {
@@ -47,6 +53,8 @@ export default function Turfs() {
 
             setTurfs(res.data.results || []);
             setCount(res.data.count || 0);
+            setHasNext(Boolean(res.data.next));
+            setHasPrev(Boolean(res.data.previous));
         } catch (err) {
             console.error("Fetch error:", err);
         } finally {
@@ -54,8 +62,11 @@ export default function Turfs() {
         }
     }
 
+    const totalPages = Math.ceil(count / PAGE_SIZE);
+
     return (
         <div className="min-h-screen bg-slate-50 px-6 py-10">
+            {/* HEADER */}
             <div className="mx-auto mb-8 max-w-6xl">
                 <h1 className="text-3xl font-bold text-slate-900">
                     Find Turfs Near You ⚽
@@ -65,10 +76,12 @@ export default function Turfs() {
                 </p>
             </div>
 
+            {/* FILTERS */}
             <div className="mx-auto mb-8 max-w-6xl rounded-2xl bg-white p-5 shadow-sm">
                 <TurfFilters filters={filters} setFilters={setFilters} />
             </div>
 
+            {/* LIST */}
             <div className="mx-auto max-w-6xl">
                 {loading ? (
                     <div className="flex items-center justify-center py-24 text-slate-500">
@@ -85,30 +98,32 @@ export default function Turfs() {
                     </div>
                 ) : (
                     <>
+                        {/* GRID */}
                         <div className="grid grid-cols-1 gap-7 sm:grid-cols-2 lg:grid-cols-3">
                             {turfs.map((turf) => (
                                 <TurfCard key={turf.id} turf={turf} />
                             ))}
                         </div>
 
-                        {count > pageSize && (
-                            <div className="mt-10 flex items-center justify-center gap-3">
+                        {/* PAGINATION */}
+                        {count > PAGE_SIZE && (
+                            <div className="mt-10 flex items-center justify-center gap-4">
                                 <button
-                                    disabled={page === 1}
+                                    disabled={!hasPrev}
                                     onClick={() => setPage((p) => p - 1)}
-                                    className="rounded-lg border px-4 py-2 text-sm disabled:opacity-40"
+                                    className="rounded-lg border px-4 py-2 text-sm font-medium disabled:opacity-40"
                                 >
-                                    ← Prev
+                                    ← Previous
                                 </button>
 
                                 <span className="text-sm text-slate-600">
-                                    Page {page} of {Math.ceil(count / pageSize)}
+                                    Page {page} of {totalPages}
                                 </span>
 
                                 <button
-                                    disabled={page >= Math.ceil(count / pageSize)}
+                                    disabled={!hasNext}
                                     onClick={() => setPage((p) => p + 1)}
-                                    className="rounded-lg border px-4 py-2 text-sm disabled:opacity-40"
+                                    className="rounded-lg border px-4 py-2 text-sm font-medium disabled:opacity-40"
                                 >
                                     Next →
                                 </button>
