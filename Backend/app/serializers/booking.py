@@ -37,8 +37,6 @@ class BookingSerializer(serializers.ModelSerializer):
         conflict = Booking.objects.filter(
             turf=data["turf"],
             booking_date=data["booking_date"],
-            status=BookingStatus.CONFIRMED,
-            payment_status=PaymentStatus.SUCCESS,
             start_time__lt=end,
             end_time__gt=start
         ).exists()
