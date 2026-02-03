@@ -1,18 +1,15 @@
+from datetime import datetime
+from django.utils import timezone
+from rest_framework import status
+from app.models.court import Court
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
-from django.utils import timezone
-from datetime import datetime
-
-from app.models.court import Court
-from app.models.booking import Booking, BookingStatus
 from app.utils.slots import generate_hour_slots
-
+from app.models.booking import Booking, BookingStatus
 
 class CourtAvailableSlotsView(APIView):
     def get(self, request, court_id):
         date_str = request.query_params.get("date")
-
         if not date_str:
             return Response({"error": "date query param is required"},
                 status=status.HTTP_400_BAD_REQUEST,

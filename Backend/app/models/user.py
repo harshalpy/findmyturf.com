@@ -1,8 +1,8 @@
 import uuid
 from enum import Enum
 from django.db import models
-from django.contrib.auth.models import AbstractUser
 from app.manager import UserManager
+from django.contrib.auth.models import AbstractUser
 
 class UserType(Enum):
     USER = 'USER'

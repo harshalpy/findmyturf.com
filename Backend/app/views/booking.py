@@ -9,7 +9,6 @@ from app.utils.notify import notifyMessage
 from app.models.booking import Booking, BookingStatus, PaymentStatus
 from app.serializers.booking import BookingCreateSerializer , BookingSerializer, BookingDetailSerializer
 
-
 class BookingCreateView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -19,9 +18,7 @@ class BookingCreateView(APIView):
 
         data = serializer.validated_data
         user = request.user
-
-        court = Court.objects.get(id=data["court"])
-
+        court = data["court"]
         start = data["start_time"]
         end = data["end_time"]
         booking_date = data["booking_date"]

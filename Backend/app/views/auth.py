@@ -1,12 +1,11 @@
-from rest_framework.views import APIView
-from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.permissions import AllowAny
-from django.contrib.auth import authenticate
-from rest_framework_simplejwt.tokens import RefreshToken
-
-from app.models.user import User, UserType
 from app.models.business import Business
+from rest_framework.views import APIView
+from app.models.user import User, UserType
+from rest_framework.response import Response
+from django.contrib.auth import authenticate
+from rest_framework.permissions import AllowAny
+from rest_framework_simplejwt.tokens import RefreshToken
 from app.serializers.auth import  UserRegisterSerializer, OwnerRegisterSerializer
 
 class UserRegisterView(APIView):
@@ -25,11 +24,9 @@ class UserRegisterView(APIView):
             user_type=UserType.USER.value,
         )
 
-        return Response(
-            {"message": "User registered successfully"},
+        return Response({"message": "User registered successfully"},
             status=status.HTTP_201_CREATED,
         )
-
 
 class OwnerRegisterView(APIView):
     permission_classes = [AllowAny]
@@ -37,7 +34,6 @@ class OwnerRegisterView(APIView):
     def post(self, request):
         serializer = OwnerRegisterSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-
         data = serializer.validated_data
 
         user = User.objects.create_user(
@@ -47,13 +43,8 @@ class OwnerRegisterView(APIView):
             user_type=UserType.OWNER.value,
         )
 
-        Business.objects.create(
-            user=user,
-            name=data["business_name"],
-        )
-
-        return Response(
-            {"message": "Owner registered successfully"},
+        Business.objects.create(user=user , name=data["business_name"])
+        return Response({"message": "Owner registered successfully"},
             status=status.HTTP_201_CREATED,
         )
 
@@ -66,23 +57,18 @@ class LoginView(APIView):
         password = request.data.get("password")
 
         if not phone_no or not password:
-            return Response(
-                {"detail": "Phone number and password are required"},
+            return Response({"detail": "Phone number and password are required"},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
         user = authenticate(phone_no=phone_no, password=password)
-
         if not user:
-            return Response(
-                {"detail": "Invalid credentials"},
+            return Response({"detail": "Invalid credentials"},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
         refresh = RefreshToken.for_user(user)
-
-        return Response(
-            {
+        return Response({
                 "access": str(refresh.access_token),
                 "refresh": str(refresh),
                 "role": user.user_type,

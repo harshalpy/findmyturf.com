@@ -1,13 +1,11 @@
-from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
-from rest_framework import status
-
-from app.models.court import Court
 from app.models.turf import Turf
-from app.serializers.court import CourtSerializer
+from rest_framework import status
+from app.models.court import Court
 from app.permission import IsOwner
-
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from app.serializers.court import CourtSerializer
+from rest_framework.permissions import IsAuthenticated
 
 class CourtCreateView(APIView):
     permission_classes = [IsAuthenticated, IsOwner]
@@ -17,10 +15,8 @@ class CourtCreateView(APIView):
         serializer.is_valid(raise_exception=True)
 
         turf_id = request.data.get("turf")
-
         if not turf_id:
-            return Response(
-                {"error": "turf is required"},
+            return Response({"error": "turf is required"},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
@@ -44,10 +40,10 @@ class CourtCreateView(APIView):
             is_open=serializer.validated_data.get("is_open", True),
         )
 
-        return Response(
-            CourtSerializer(court).data,
+        return Response(CourtSerializer(court).data,
             status=status.HTTP_201_CREATED,
         )
+
 class TurfCourtsView(APIView):
     def get(self, request, turf_id):
         courts = Court.objects.filter(
@@ -55,8 +51,6 @@ class TurfCourtsView(APIView):
             is_open=True,
         )
 
-        return Response(
-            CourtSerializer(courts, many=True).data,
+        return Response(CourtSerializer(courts, many=True).data,
             status=status.HTTP_200_OK,
         )
-

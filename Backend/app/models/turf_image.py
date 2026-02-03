@@ -1,8 +1,7 @@
 import uuid
-from cloudinary.models import CloudinaryField
 from django.db import models
 from app.models.turf import Turf
-
+from cloudinary.models import CloudinaryField
 
 class TurfImage(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -14,5 +13,5 @@ class TurfImage(models.Model):
         db_table = "turf_image"
         indexes = [
             models.Index(fields=["id"], name="turf_image_id_idx"),
-            models.Index(fields=["turf"], name="turf_idx"),
+            models.Index(fields=["turf"], name="turf_image_turf_idx"),
         ]

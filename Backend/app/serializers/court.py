@@ -1,5 +1,5 @@
-from rest_framework import serializers
 from app.models.court import Court
+from rest_framework import serializers
 
 class CourtSerializer(serializers.ModelSerializer):
     class Meta:

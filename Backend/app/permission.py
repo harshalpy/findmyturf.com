@@ -8,3 +8,7 @@ class IsOwner(BasePermission):
 class IsUser(BasePermission):
     def has_permission(self, request, view):
         return request.user.user_type == UserType.USER.value
+
+class IsAdmin(BasePermission):
+    def has_permission(self, request, view):
+        return request.user.user_type == UserType.ADMIN.value

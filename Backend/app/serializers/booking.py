@@ -1,7 +1,6 @@
 from rest_framework import serializers
 from app.models.booking import Booking
 
-
 class BookingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Booking
@@ -17,7 +16,6 @@ class BookingSerializer(serializers.ModelSerializer):
             "updated_at",
         ]
 
-
 class BookingCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Booking
@@ -28,7 +26,6 @@ class BookingCreateSerializer(serializers.ModelSerializer):
             "end_time",
         ]
 
-
 class BookingDetailSerializer(serializers.ModelSerializer):
     turf_name = serializers.CharField(source="court.turf.name", read_only=True)
     turf_city = serializers.CharField(source="court.turf.city", read_only=True)
@@ -37,7 +34,6 @@ class BookingDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Booking
         fields = "__all__"
-
 
 class OwnerBookingSerializer(serializers.ModelSerializer):
     customer_name = serializers.CharField(source="user.name", read_only=True)

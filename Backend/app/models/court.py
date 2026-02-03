@@ -11,11 +11,10 @@ class SportsType(Enum):
     BADMINTON = "BADMINTON"
     VOLLEYBALL = "VOLLEYBALL"
     PICKLEBALL = "PICKLEBALL"
-    
 
 class Court(models.Model):
     id = models.UUIDField(primary_key = True, default = uuid.uuid4)
-    turf = models.ForeignKey(Turf , on_delete = models.CASCADE)
+    turf = models.ForeignKey(Turf , on_delete = models.CASCADE , related_name = "courts")
     sports_type = models.CharField(max_length = 20 , choices = [(tag.name, tag.value) for tag in SportsType] , default = SportsType.CRICKET.value)
     price = models.IntegerField()
     is_open = models.BooleanField(default = True)

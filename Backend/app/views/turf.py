@@ -1,16 +1,13 @@
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-from django.db.models import Min
-
 from app.models.turf import Turf
+from rest_framework import status
 from app.models.court import Court
-from app.serializers.turf import TurfSerializer
-from app.pagination import TurfPagination
 from app.permission import IsOwner
 from app.utils.geo import haversine
+from rest_framework.views import APIView
+from app.pagination import TurfPagination
+from rest_framework.response import Response
+from app.serializers.turf import TurfSerializer
 from rest_framework.permissions import IsAuthenticated
-
 
 class TurfCreateView(APIView):
     permission_classes = [IsAuthenticated, IsOwner]
@@ -23,11 +20,9 @@ class TurfCreateView(APIView):
             business=request.user.business, **serializer.validated_data
         )
 
-        return Response(
-            TurfSerializer(turf).data,
+        return Response(TurfSerializer(turf).data,
             status=status.HTTP_201_CREATED,
         )
-
 
 class TurfUpdateView(APIView):
     permission_classes = [IsAuthenticated, IsOwner]
@@ -36,8 +31,7 @@ class TurfUpdateView(APIView):
         try:
             turf = Turf.objects.get(id=turf_id, business__user=request.user)
         except Turf.DoesNotExist:
-            return Response(
-                {"error": "Turf not found"},
+            return Response({"error": "Turf not found"},
                 status=status.HTTP_404_NOT_FOUND,
             )
 
@@ -49,11 +43,9 @@ class TurfUpdateView(APIView):
 
         turf.save()
 
-        return Response(
-            TurfSerializer(turf).data,
+        return Response(TurfSerializer(turf).data,
             status=status.HTTP_200_OK,
         )
-
 
 class TurfListView(APIView):
     pagination_class = TurfPagination
@@ -68,16 +60,14 @@ class TurfListView(APIView):
         if city:
             queryset = queryset.filter(city__iexact=city)
 
-        # 🔹 Filter by COURT price
         if min_price or max_price:
             court_filter = Court.objects.filter(turf__in=queryset)
 
             if min_price:
                 court_filter = court_filter.filter(price__gte=min_price)
-
+            
             if max_price:
                 court_filter = court_filter.filter(price__lte=max_price)
-
             queryset = queryset.filter(id__in=court_filter.values("turf_id"))
 
         lat = request.query_params.get("lat")
@@ -115,12 +105,10 @@ class TurfDetailView(APIView):
         try:
             turf = Turf.objects.get(id=turf_id, is_open=True)
         except Turf.DoesNotExist:
-            return Response(
-                {"error": "Turf not found"},
+            return Response({"error": "Turf not found"},
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-        return Response(
-            TurfSerializer(turf).data,
+        return Response(TurfSerializer(turf).data,
             status=status.HTTP_200_OK,
         )
