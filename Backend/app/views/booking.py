@@ -117,15 +117,12 @@ class CancelBookingView(APIView):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        if booking.status in [BookingStatus.CANCELLED, BookingStatus.REFUNDED]:
-            return Response(
-                {"error": "Booking already cancelled"},
+        if booking.status == BookingStatus.CANCELLED:
+            return Response({"error": "Booking already cancelled"},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
         booking.status = BookingStatus.CANCELLED
-        if booking.payment_status == PaymentStatus.SUCCESS:
-            booking.payment_status = PaymentStatus.REFUNDED
 
         booking.save()
 

@@ -1,9 +1,12 @@
 import { useState } from "react";
-import { loginApi } from "../../services/auth.service";
+
 import { useNavigate } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 import Button from "../../components/ui/button";
 import Input from "../../components/ui/input";
+
+const loginApi = (data) =>
+  api.post("/auth/login/", data);
 
 export default function LoginForm() {
   const { login } = useAuth();

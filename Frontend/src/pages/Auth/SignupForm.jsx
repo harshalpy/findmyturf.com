@@ -1,14 +1,19 @@
 import { useState } from "react";
-import {
-  registerUser,
-  registerOwner,
-  loginApi
-} from "../../services/auth.service";
 
 import useAuth from "../../hooks/useAuth";
 import Button from "../../components/ui/button";
 import Input from "../../components/ui/input";
 import { useNavigate } from "react-router-dom";
+const registerUser = (data) =>
+  api.post("/auth/register/user/", data);
+
+const registerOwner = (data) =>
+  api.post("/auth/register/owner/", data);
+
+const loginApi = (data) =>
+  api.post("/auth/login/", data);
+
+
 
 export default function SignupForm({ role }) {
   const { login } = useAuth();

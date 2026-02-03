@@ -1,24 +1,46 @@
 export default function BookingSummary({ selectedSlots, price }) {
-    if (selectedSlots.length === 0) return null;
+    if (!selectedSlots || selectedSlots.length === 0) return null;
 
-    const start = selectedSlots[0].start_time;
-    const end = selectedSlots[selectedSlots.length - 1].end_time;
+    const startTime = selectedSlots[0].start_time;
+    const endTime = selectedSlots[selectedSlots.length - 1].end_time;
     const hours = selectedSlots.length;
-    const total = hours * price;
+    const totalAmount = hours * price;
 
     return (
-        <div className="mt-4 rounded-xl bg-slate-100 p-4 text-sm">
-            <p>
-                <span className="font-semibold">Time:</span>{" "}
-                {start} – {end}
-            </p>
-            <p>
-                <span className="font-semibold">Duration:</span>{" "}
-                {hours} hour(s)
-            </p>
-            <p className="mt-1 font-semibold">
-                Total: ₹{total}
-            </p>
+        <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+            <h3 className="mb-3 text-sm font-semibold text-slate-900">
+                Booking Summary
+            </h3>
+
+            <div className="space-y-2 text-sm text-slate-700">
+                <div className="flex justify-between">
+                    <span>Time Slot</span>
+                    <span className="font-medium">
+                        {startTime} – {endTime}
+                    </span>
+                </div>
+
+                <div className="flex justify-between">
+                    <span>Duration</span>
+                    <span className="font-medium">
+                        {hours} {hours > 1 ? "hours" : "hour"}
+                    </span>
+                </div>
+
+                <div className="flex justify-between">
+                    <span>Price / hour</span>
+                    <span className="font-medium">₹{price}</span>
+                </div>
+
+                <div className="border-t pt-3 flex justify-between items-center">
+                    <span className="text-sm font-semibold text-slate-900">
+                        Total Payable
+                    </span>
+                    <span className="text-xl font-bold text-slate-900">
+                        ₹{totalAmount}
+                    </span>
+                </div>
+            </div>
         </div>
     );
 }

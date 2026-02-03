@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "../config/api";
+import api from "../api";
 
 export default function MyBookings() {
     const navigate = useNavigate();

@@ -28,8 +28,14 @@ class BookingCreateSerializer(serializers.ModelSerializer):
 
 class BookingDetailSerializer(serializers.ModelSerializer):
     turf_name = serializers.CharField(source="court.turf.name", read_only=True)
+    turf_location = serializers.CharField(source="court.turf.location", read_only=True)
     turf_city = serializers.CharField(source="court.turf.city", read_only=True)
+    turf_state = serializers.CharField(source="court.turf.state", read_only=True)
     court_sport = serializers.CharField(source="court.sports_type", read_only=True)
+    turf_location = serializers.CharField(source="court.turf.location", read_only=True)
+    length = serializers.CharField(source="court.length", read_only=True)
+    width = serializers.CharField(source="court.width", read_only=True)
+    height = serializers.CharField(source="court.height", read_only=True)
 
     class Meta:
         model = Booking

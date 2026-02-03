@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import api from "../config/api";
+import api from "../api";
 import SlotSelector from "../components/SlotSelector";
 import BookingSummary from "../components/BookingSummary";
 
@@ -9,8 +9,12 @@ export default function TurfDetail() {
     const navigate = useNavigate();
 
     const [turf, setTurf] = useState(null);
+    const [courts, setCourts] = useState([]);
+    const [selectedCourt, setSelectedCourt] = useState(null);
+
     const [slots, setSlots] = useState([]);
     const [selectedSlots, setSelectedSlots] = useState([]);
+
     const [selectedDate, setSelectedDate] = useState(
         new Date().toISOString().split("T")[0]
     );
@@ -24,13 +28,26 @@ export default function TurfDetail() {
     }, []);
 
     useEffect(() => {
-        if (turf) fetchSlots();
-    }, [selectedDate, turf]);
+        if (selectedCourt) fetchSlots();
+    }, [selectedDate, selectedCourt]);
+
+    function getTurfImage(turf) {
+        if (!turf?.images || turf.images.length === 0) {
+            return "https://via.placeholder.com/400x250";
+        }
+
+        const defaultImg = turf.images.find(img => img.is_default);
+        return defaultImg?.image_url || turf.images[0].image_url;
+    }
+
 
     async function fetchTurf() {
         try {
-            const res = await api.get(`/turf/${id}/`);
-            setTurf(res.data);
+            const turfRes = await api.get(`/turf/${id}/`);
+            setTurf(turfRes.data);
+
+            const courtsRes = await api.get(`/turf/${id}/courts/`);
+            setCourts(courtsRes.data);
         } catch (err) {
             console.error(err);
         } finally {
@@ -44,10 +61,9 @@ export default function TurfDetail() {
 
         try {
             const res = await api.get(
-                `/turf/${id}/available-slots/`,
+                `/court/${selectedCourt.id}/available-slots/`,
                 { params: { date: selectedDate } }
             );
-
             setSlots(res.data.available_slots || []);
         } catch (err) {
             console.error("Slot fetch error:", err);
@@ -57,25 +73,25 @@ export default function TurfDetail() {
     }
 
     async function handleBooking() {
-        if (selectedSlots.length === 0) return;
+        if (!selectedCourt || selectedSlots.length === 0) return;
 
         setBookingLoading(true);
 
         try {
             const res = await api.post("/booking/create/", {
-                turf: turf.id,
+                court: selectedCourt.id,
                 booking_date: selectedDate,
                 start_time: selectedSlots[0].start_time,
                 end_time: selectedSlots[selectedSlots.length - 1].end_time,
             });
 
-            // ✅ success → go to booking detail
             navigate(`/booking/${res.data.id}`);
         } catch (err) {
             if (err.response?.status === 401) {
                 navigate("/login");
-            } else {
-                alert("Slot already booked or unavailable");
+            }
+            else {
+                alert("Slot unavailable or already booked");
             }
         } finally {
             setBookingLoading(false);
@@ -101,12 +117,11 @@ export default function TurfDetail() {
     return (
         <div className="min-h-screen bg-slate-50 px-6 py-10">
             <div className="mx-auto max-w-6xl grid grid-cols-1 gap-8 lg:grid-cols-3">
-
                 {/* LEFT */}
                 <div className="lg:col-span-2 space-y-6">
                     <div className="overflow-hidden rounded-2xl bg-white shadow-sm">
                         <img
-                            src={turf.default_image || "https://via.placeholder.com/800x400"}
+                            src={getTurfImage(turf)}
                             alt={turf.name}
                             className="h-80 w-full object-cover"
                         />
@@ -121,77 +136,89 @@ export default function TurfDetail() {
                             {turf.location}, {turf.city}, {turf.state}
                         </p>
 
-                        <div className="mt-6 grid grid-cols-2 gap-4 text-sm text-slate-700">
-                            <div>
-                                <span className="font-semibold">Price</span>
-                                <p>₹{turf.price}/hour</p>
-                            </div>
-                            <div>
-                                <span className="font-semibold">Timings</span>
-                                <p>
-                                    {turf.opening_time} – {turf.closing_time}
-                                </p>
-                            </div>
-                        </div>
+                        <p className="mt-4 text-sm text-slate-700">
+                            Timings: {turf.opening_time} – {turf.closing_time}
+                        </p>
                     </div>
                 </div>
 
-                {/* RIGHT – BOOKING */}
+                {/* RIGHT */}
                 <div className="lg:sticky lg:top-8 h-fit">
-                    <div className="rounded-2xl bg-white p-6 shadow-md">
+                    <div className="rounded-2xl bg-white p-6 shadow-md space-y-5">
+                        <h2 className="text-lg font-semibold">Book a Court</h2>
 
-                        <div className="mb-6">
-                            <p className="text-sm text-slate-500">Price per hour</p>
-                            <p className="text-3xl font-bold text-slate-900">
-                                ₹{turf.price}
+                        {/* COURT SELECT */}
+                        <div className="space-y-2">
+                            <p className="text-sm font-medium text-slate-700">
+                                Select Court
                             </p>
+
+                            <div className="grid grid-cols-2 gap-3">
+                                {courts.map((court) => (
+                                    <button
+                                        key={court.id}
+                                        onClick={() => setSelectedCourt(court)}
+                                        className={`rounded-xl border px-3 py-2 text-sm font-medium transition
+                      ${selectedCourt?.id === court.id
+                                                ? "border-slate-900 bg-slate-900 text-white"
+                                                : "border-slate-200 hover:border-slate-900"
+                                            }
+                    `}
+                                    >
+                                        {court.sports_type}
+                                        <div className="text-xs opacity-80">
+                                            ₹{court.price}/hr
+                                        </div>
+                                    </button>
+                                ))}
+                            </div>
                         </div>
 
-                        <h2 className="mb-4 text-lg font-semibold">
-                            Book a Slot
-                        </h2>
-
+                        {/* DATE */}
                         <input
                             type="date"
                             value={selectedDate}
                             onChange={(e) => setSelectedDate(e.target.value)}
-                            className="mb-4 w-full rounded-xl border border-slate-200 px-4 py-2 text-sm"
+                            className="w-full rounded-xl border border-slate-200 px-4 py-2 text-sm"
                         />
 
-                        {slotLoading ? (
-                            <p className="text-sm text-slate-500">
-                                Loading slots...
-                            </p>
-                        ) : slots.length === 0 ? (
-                            <p className="text-sm text-red-500">
-                                No slots available
-                            </p>
-                        ) : (
-                            <>
-                                <SlotSelector
-                                    slots={slots}
-                                    selectedSlots={selectedSlots}
-                                    setSelectedSlots={setSelectedSlots}
-                                />
+                        {/* SLOTS */}
+                        {selectedCourt && (
+                            slotLoading ? (
+                                <p className="text-sm text-slate-500">Loading slots...</p>
+                            ) : slots.length === 0 ? (
+                                <p className="text-sm text-red-500">No slots available</p>
+                            ) : (
+                                <>
+                                    <SlotSelector
+                                        slots={slots}
+                                        selectedSlots={selectedSlots}
+                                        setSelectedSlots={setSelectedSlots}
+                                    />
 
-                                <BookingSummary
-                                    selectedSlots={selectedSlots}
-                                    price={turf.price}
-                                />
-                            </>
+                                    <BookingSummary
+                                        selectedSlots={selectedSlots}
+                                        price={selectedCourt.price}
+                                    />
+                                </>
+                            )
                         )}
 
                         <button
-                            disabled={selectedSlots.length === 0 || bookingLoading}
+                            disabled={
+                                !selectedCourt ||
+                                selectedSlots.length === 0 ||
+                                bookingLoading
+                            }
                             onClick={handleBooking}
-                            className={`mt-6 w-full rounded-xl py-3 text-sm font-semibold transition
+                            className={`mt-2 w-full rounded-xl py-3 text-sm font-semibold transition
                 ${selectedSlots.length > 0
                                     ? "bg-slate-900 text-white hover:bg-slate-800"
                                     : "cursor-not-allowed bg-slate-200 text-slate-500"
                                 }
               `}
                         >
-                            {bookingLoading ? "Booking..." : "Book Slot"}
+                            {bookingLoading ? "Booking..." : "Confirm Booking"}
                         </button>
                     </div>
                 </div>

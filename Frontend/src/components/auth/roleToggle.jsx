@@ -4,9 +4,11 @@ export default function RoleToggle({ role, setRole }) {
       <button
         onClick={() => setRole("user")}
         className={`rounded-xl py-2 text-sm font-medium transition
-          ${role === "user"
-            ? "bg-slate-900 text-white"
-            : "bg-slate-100 text-slate-600 hover:bg-slate-200"}
+          ${
+            role === "user"
+              ? "bg-slate-900 text-white"
+              : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+          }
         `}
       >
         User
@@ -15,9 +17,11 @@ export default function RoleToggle({ role, setRole }) {
       <button
         onClick={() => setRole("business")}
         className={`rounded-xl py-2 text-sm font-medium transition
-          ${role === "business"
-            ? "bg-slate-900 text-white"
-            : "bg-slate-100 text-slate-600 hover:bg-slate-200"}
+          ${
+            role === "business"
+              ? "bg-slate-900 text-white"
+              : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+          }
         `}
       >
         Business

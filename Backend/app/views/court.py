@@ -43,6 +43,29 @@ class CourtCreateView(APIView):
         return Response(CourtSerializer(court).data,
             status=status.HTTP_201_CREATED,
         )
+    
+class CourtUpdateView(APIView):
+    permission_classes = [IsAuthenticated, IsOwner]
+    
+    def patch(self, request, court_id):
+        try:
+            court = Court.objects.get(id=court_id, turf__business__user=request.user)
+        except Court.DoesNotExist:
+            return Response({"error": "Court not found"},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        serializer = CourtSerializer(court, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+
+        for attr, value in serializer.validated_data.items():
+            setattr(court, attr, value)
+
+        court.save()
+
+        return Response(CourtSerializer(court).data,
+            status=status.HTTP_200_OK,
+        )
 
 class TurfCourtsView(APIView):
     def get(self, request, turf_id):
@@ -52,5 +75,18 @@ class TurfCourtsView(APIView):
         )
 
         return Response(CourtSerializer(courts, many=True).data,
+            status=status.HTTP_200_OK,
+        )
+
+class GetCourtView(APIView):
+    def get(self, request, court_id):
+        try:
+            court = Court.objects.get(id=court_id, is_open=True)
+        except Court.DoesNotExist:
+            return Response({"error": "Court not found"},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        return Response(CourtSerializer(court).data,
             status=status.HTTP_200_OK,
         )

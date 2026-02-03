@@ -1,13 +1,12 @@
 import { use, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import api from "../config/api";
+import api from "../api";
 
 export default function BookingDetail() {
     const { id } = useParams();
     const navigate = useNavigate();
 
     const [booking, setBooking] = useState(null);
-    const [turf, setTurf] = useState(null);
     const [loading, setLoading] = useState(true);
     const [actionLoading, setActionLoading] = useState(false);
 
@@ -18,10 +17,7 @@ export default function BookingDetail() {
     async function fetchBooking() {
         try {
             const res = await api.get(`/booking/${id}/`);
-            setBooking(res.data[0]);
-
-            const turfRes = await api.get(`/turf/${res.data[0].turf}/`);
-            setTurf(turfRes.data);
+            setBooking(res.data);
         } catch (err) {
             console.error(err);
         } finally {
@@ -30,9 +26,9 @@ export default function BookingDetail() {
     }
 
     function openGoogleMaps() {
-        if (!turf) return;
+        if (!booking) return;
 
-        const query = `${turf.location}, ${turf.city}, ${turf.state}`;
+        const query = `${booking.turf_location}, ${booking.turf_city}, ${booking.turf_state}`;
         const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
             query
         )}`;
@@ -68,7 +64,7 @@ export default function BookingDetail() {
         );
     }
 
-    if (!booking || !turf) {
+    if (!booking) {
         return (
             <div className="flex min-h-screen items-center justify-center text-red-500">
                 Booking not found
@@ -91,7 +87,7 @@ export default function BookingDetail() {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 px-6 py-12">
+        <div className="min-h-screen bg-linear-to-br from-slate-50 to-slate-100 px-6 py-12">
             <div className="mx-auto max-w-4xl space-y-8">
 
                 {/* HEADER */}
@@ -107,20 +103,19 @@ export default function BookingDetail() {
                     </div>
                 </div>
 
-                {/* TURF INFO */}
                 <div className="rounded-3xl bg-white p-6 shadow-lg">
                     <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                         <div>
                             <h2 className="text-lg font-semibold text-slate-900">
-                                {turf.name}
+                                {booking.turf_name}
                             </h2>
 
                             <p className="mt-1 text-sm text-slate-600">
-                                {turf.location}, {turf.city}, {turf.state}
+                                {booking.turf_location}, {booking.turf_city}, {booking.turf_state}
                             </p>
 
                             <p className="mt-1 text-xs text-slate-500">
-                                Size: {turf.length} × {turf.breadth} × {turf.height} m
+                                Size: {booking.length} × {booking.width} × {booking.height} m
                             </p>
                         </div>
 
@@ -177,24 +172,26 @@ export default function BookingDetail() {
                                 {booking.status}
                             </span>
 
-                            <span
-                                className={`rounded-full px-3 py-1 text-xs font-semibold ${paymentColor[booking.payment_status]}`}
-                            >
-                                {booking.payment_status}
-                            </span>
+                            {booking.payment_status != "CANCELLED" && (
+                                <span
+                                    className={`rounded-full px-3 py-1 text-xs font-semibold ${paymentColor[booking.payment_status]}`}
+                                >
+                                    {booking.payment_status}
+                                </span>
+                            )}
                         </div>
                     </div>
                 </div>
 
-                {booking.status != "CONFIRMED" && (
-                <div className="rounded-3xl bg-white p-6 shadow-lg space-y-4">
-                    {booking.payment_status === "INITIATED" && (
-                        <button onClick={() => alert("Redirect to payment gateway")} className="w-full rounded-xl bg-gradient-to-r from-slate-900 to-slate-800 py-3 text-sm font-semibold text-white hover:opacity-90">
-                            Pay Now
-                        </button>
-                    )}
+                {booking.status != "CONFIRMED" || booking.payment_status != "CANCELLED" && (
+                    <div className="rounded-3xl bg-white p-6 shadow-lg space-y-4">
+                        {booking.payment_status === "INITIATED" && (
+                            <button onClick={() => alert("Redirect to payment gateway")} className="w-full rounded-xl bg-linear-to-br from-slate-900 to-slate-800 py-3 text-sm font-semibold text-white hover:opacity-90">
+                                Pay Now
+                            </button>
+                        )}
 
-                    {booking.payment_status != "SUCCESS" && booking.status != "CANCELLED" && (
+                        {booking.payment_status != "SUCCESS" && booking.status != "CANCELLED" && (
                             <button
                                 onClick={cancelBooking}
                                 disabled={actionLoading}
@@ -204,18 +201,18 @@ export default function BookingDetail() {
                             </button>
                         )}
 
-                    {booking.status === "CANCELLED" && (
-                        <p className="text-center text-sm font-medium text-red-600">
-                            This booking has been cancelled
-                        </p>
-                    )}
+                        {booking.status === "CANCELLED" && (
+                            <p className="text-center text-sm font-medium text-red-600">
+                                This booking has been cancelled
+                            </p>
+                        )}
 
-                    {booking.status === "REFUNDED" && (
-                        <p className="text-center text-sm font-medium text-blue-600">
-                            Amount refunded successfully
-                        </p>
-                    )}
-                </div>
+                        {booking.status === "REFUNDED" && (
+                            <p className="text-center text-sm font-medium text-blue-600">
+                                Amount refunded successfully
+                            </p>
+                        )}
+                    </div>
                 )}
             </div>
         </div>
