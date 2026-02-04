@@ -3,6 +3,8 @@ import api from "../api";
 import TurfCard from "../components/TurfCard";
 import TurfFilters from "../components/TurfFilters";
 import useGeoLocation from "../hooks/useGeoLocation";
+import PageLayout from "../components/PageLayout";
+import { ListShimmerGrid, TurfCardShimmer } from "../components/Shimmers";
 
 export default function Turfs() {
     const location = useGeoLocation();
@@ -62,7 +64,8 @@ export default function Turfs() {
     }
 
     return (
-        <div className="min-h-screen bg-slate-50 px-6 py-10">
+        <PageLayout>
+        <div className="min-h-screen px-6 py-10">
             {/* HEADER */}
             <div className="mx-auto mb-8 max-w-6xl">
                 <h1 className="text-3xl font-bold text-slate-900">
@@ -81,9 +84,11 @@ export default function Turfs() {
             {/* LIST */}
             <div className="mx-auto max-w-6xl">
                 {loading ? (
-                    <div className="flex items-center justify-center py-24 text-slate-500">
-                        Loading turfs near you...
-                    </div>
+                    <ListShimmerGrid
+                        count={6}
+                        gapClassName="gap-7"
+                        renderItem={(index) => <TurfCardShimmer key={index} />}
+                    />
                 ) : turfs.length === 0 ? (
                     <div className="flex flex-col items-center justify-center py-24 text-slate-500">
                         <h3 className="mb-2 text-lg font-semibold">
@@ -130,5 +135,6 @@ export default function Turfs() {
                 )}
             </div>
         </div>
+        </PageLayout>
     );
 }
