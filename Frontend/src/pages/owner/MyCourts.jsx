@@ -8,6 +8,7 @@ export default function MyCourts() {
 
   const [courts, setCourts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [updatingCourts, setUpdatingCourts] = useState(new Set());
 
   useEffect(() => {
     fetchCourts();
@@ -25,6 +26,7 @@ export default function MyCourts() {
   }
 
   async function toggleCourt(courtId, isOpen) {
+    setUpdatingCourts((prev) => new Set(prev).add(courtId));
     try {
       await api.patch(`/court/${courtId}/update/`, {
         is_open: !isOpen,
@@ -35,9 +37,14 @@ export default function MyCourts() {
           c.id === courtId ? { ...c, is_open: !isOpen } : c
         )
       );
-    } 
-    catch (err) {
+    } catch (err) {
       alert("Failed to update court");
+    } finally {
+      setUpdatingCourts((prev) => {
+        const newSet = new Set(prev);
+        newSet.delete(courtId);
+        return newSet;
+      });
     }
   }
 
@@ -132,13 +139,18 @@ export default function MyCourts() {
                   onClick={() =>
                     toggleCourt(court.id, court.is_open)
                   }
+                  disabled={updatingCourts.has(court.id)}
                   className={`flex-1 rounded-xl py-2 text-sm font-medium ${
                     court.is_open
                       ? "bg-red-50 text-red-600 hover:bg-red-100"
                       : "bg-green-50 text-green-600 hover:bg-green-100"
-                  }`}
+                  } ${updatingCourts.has(court.id) ? "opacity-50 cursor-not-allowed" : ""}`}
                 >
-                  {court.is_open ? "Disable" : "Enable"}
+                  {updatingCourts.has(court.id)
+                    ? "Updating..."
+                    : court.is_open
+                    ? "Disable"
+                    : "Enable"}
                 </button>
               </div>
             </div>
