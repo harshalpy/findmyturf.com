@@ -1,6 +1,7 @@
 from app.models.turf import Turf
 from rest_framework import status
 from app.models.court import Court
+from django.db.models import Q
 from app.permission import IsOwner
 from app.utils.geo import haversine
 from rest_framework.views import APIView
@@ -62,7 +63,9 @@ class TurfListView(APIView):
         sports_type = request.query_params.get("sports_type")
 
         if city:
-            queryset = queryset.filter(city__iexact=city)
+            queryset = queryset.filter(
+                Q(city__iexact=city) | Q(location__icontains=city)
+            )
 
         if sports_type:
             queryset = queryset.filter(courts__sports_type__iexact=sports_type).distinct()
