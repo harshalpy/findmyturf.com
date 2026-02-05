@@ -29,6 +29,8 @@ class CourtCreateView(APIView):
             return Response({"error": "Turf not found or not owned by you"},
                 status=status.HTTP_404_NOT_FOUND,
             )
+            
+        
 
         court = Court.objects.create(
             turf=turf,
