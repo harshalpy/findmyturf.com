@@ -1,10 +1,11 @@
-from datetime import datetime
+from datetime import timedelta , datetime
+from django.utils import timezone
 from django.core.cache import cache
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
-from app.models.court import Court
+from django.conf import settings
 from app.utils.notify import notifyMessage
 from app.models.booking import Booking, BookingStatus, PaymentStatus
 from app.serializers.booking import BookingCreateSerializer , BookingSerializer, BookingDetailSerializer
@@ -24,13 +25,6 @@ class BookingCreateView(APIView):
         end = data["end_time"]
         booking_date = data["booking_date"]
 
-        # Check if court is disabled
-        if not court.is_open:
-            return Response(
-                {"error": "Court is currently disabled"},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
         if start >= end:
             return Response(
                 {"error": "End time must be after start time"},
@@ -46,12 +40,20 @@ class BookingCreateView(APIView):
         )
 
         has_conflict = conflicts.exists()
-        is_pending = conflicts.filter(status=BookingStatus.PENDING).exists()
-
-        if is_pending:
+        is_pending = conflicts.filter(status=BookingStatus.PENDING)
+        
+        if is_pending.exists():
+            if is_pending.count() == 1 and is_pending.first().user == user:
+                ResponseData = BookingSerializer(conflicts.first()).data
+                ResponseData['expiry'] = booking.created_at + timedelta(minutes=settings.PAYMENT_WINDOW_MINUTES)
+                ResponseData["message"] = "You already have a pending booking for this slot. we are redirecting you to the booking page"
+                return Response(
+                    ResponseData ,
+                    status=status.HTTP_200_OK,
+                )
+            
             cache.set(f"booking:{court.id}:{booking_date}:{start}:{end}", request.user.phone_no , 60*60)
-            return Response(
-                {"error": "This slot is currently in booking stage we will notify you if the slot cancels."},
+            return Response({"error": "This slot is currently in booking stage we will notify you if the slot cancels."},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
@@ -77,8 +79,10 @@ class BookingCreateView(APIView):
             payment_status=PaymentStatus.INITIATED,
         )
 
+        ResponseData = BookingSerializer(booking).data
+        ResponseData['expiry'] = booking.created_at + timedelta(minutes=settings.PAYMENT_WINDOW_MINUTES)
         return Response(
-            BookingSerializer(booking).data,
+            ResponseData , 
             status=status.HTTP_201_CREATED,
         )
 
@@ -103,13 +107,13 @@ class BookingDetailView(APIView):
                 user=request.user,
             )
         except Booking.DoesNotExist:
-            return Response(
-                {"error": "Booking not found"},
+            return Response({"error": "Booking not found"},
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-        serializer = BookingDetailSerializer(booking)
-        return Response(serializer.data)
+        ResponseData = BookingDetailSerializer(booking).data
+        ResponseData['expiry'] = booking.created_at + timedelta(minutes=settings.PAYMENT_WINDOW_MINUTES)
+        return Response(ResponseData)
 
 
 class CancelBookingView(APIView):

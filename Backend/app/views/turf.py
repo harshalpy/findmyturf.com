@@ -1,17 +1,15 @@
-from app.models.turf import Turf
+from django.db.models import Count
 from rest_framework import status
-from app.models.court import Court
-from django.db.models import Q
-from app.permission import IsOwner
-from app.utils.geo import haversine
-from rest_framework.views import APIView
-from app.pagination import TurfPagination
-from rest_framework.response import Response
-from app.serializers.turf import TurfSerializer
 from rest_framework.permissions import IsAuthenticated
-
-# Default radius in km for location-based filtering
-DEFAULT_RADIUS = 25
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from app.models.booking import Booking, BookingStatus
+from app.models.court import Court
+from app.models.turf import Turf
+from app.pagination import TurfPagination
+from app.permission import IsOwner
+from app.serializers.turf import TurfSerializer
+from app.utils.geo import haversine
 
 class TurfCreateView(APIView):
     permission_classes = [IsAuthenticated, IsOwner]
@@ -21,15 +19,12 @@ class TurfCreateView(APIView):
         serializer.is_valid(raise_exception=True)
 
         turf = Turf.objects.create(
-            business=request.user.business,
-            **serializer.validated_data
+            business=request.user.business, **serializer.validated_data
         )
 
-        return Response(
-            TurfSerializer(turf).data,
-            status=status.HTTP_201_CREATED
+        return Response(TurfSerializer(turf).data,
+            status=status.HTTP_201_CREATED,
         )
-
 
 class TurfUpdateView(APIView):
     permission_classes = [IsAuthenticated, IsOwner]
@@ -45,7 +40,7 @@ class TurfUpdateView(APIView):
         serializer = TurfSerializer(turf, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
 
-        for attr, value in serializer.validated_data.items():  # type: ignore
+        for attr, value in serializer.validated_data.items():
             setattr(turf, attr, value)
 
         turf.save()
@@ -63,15 +58,9 @@ class TurfListView(APIView):
         city = request.query_params.get("city")
         min_price = request.query_params.get("min_price")
         max_price = request.query_params.get("max_price")
-        sports_type = request.query_params.get("sports_type")
 
         if city:
-            queryset = queryset.filter(
-                Q(city__iexact=city) | Q(location__icontains=city)
-            )
-
-        if sports_type:
-            queryset = queryset.filter(courts__sports_type__iexact=sports_type).distinct()
+            queryset = queryset.filter(city__iexact=city)
 
         if min_price or max_price:
             court_filter = Court.objects.filter(turf__in=queryset)
@@ -83,12 +72,9 @@ class TurfListView(APIView):
                 court_filter = court_filter.filter(price__lte=max_price)
             queryset = queryset.filter(id__in=court_filter.values("turf_id"))
 
-        # Location-based filtering
-
         lat = request.query_params.get("lat")
         lon = request.query_params.get("lon")
-        radius_str = request.query_params.get("radius")
-        radius = float(radius_str) if radius_str else DEFAULT_RADIUS  # Use default radius if not provided
+        radius = float(request.query_params.get("radius", 10))
         sort = request.query_params.get("sort")
 
         results = []
@@ -97,24 +83,18 @@ class TurfListView(APIView):
             lat = float(lat)
             lon = float(lon)
 
-            # Filter turfs within the specified radius
             for turf in queryset:
                 distance = haversine(lat, lon, turf.latitude, turf.longitude)
+
                 if distance <= radius:
                     data = TurfSerializer(turf).data
                     data["distance_km"] = round(distance, 2)
                     results.append(data)
 
-            if results:  # If location-based filter has results
-                if sort == "distance":
-                    results.sort(key=lambda x: x["distance_km"])
-            else:
-                # Fallback: show default list of latest turfs if no results within radius
-                # Use the filtered queryset (by city/price) ordered by latest
-                results = TurfSerializer(queryset.order_by('-created_at'), many=True).data
+            if sort == "distance":
+                results.sort(key=lambda x: x["distance_km"])
         else:
-            # No user location provided: show fallback default list of latest turfs
-            results = TurfSerializer(queryset.order_by('-created_at'), many=True).data
+            results = TurfSerializer(queryset, many=True).data
 
         paginator = self.pagination_class()
         page = paginator.paginate_queryset(results, request)
@@ -134,3 +114,57 @@ class TurfDetailView(APIView):
         return Response(TurfSerializer(turf).data,
             status=status.HTTP_200_OK,
         )
+
+
+class MostBookedTurfView(APIView):
+    """
+    Public endpoint for normal users to see the most booked turf.
+
+    Optional query params:
+      - city: filter by city name (case-insensitive)
+    """
+
+    def get(self, request):
+        qs = Booking.objects.filter(status=BookingStatus.CONFIRMED)
+
+        city = request.query_params.get("city")
+        if city:
+            qs = qs.filter(court__turf__city__iexact=city)
+
+        by_turf = (
+            qs.values("court__turf_id")
+            .annotate(
+                total_bookings=Count("id"),
+            )
+            .order_by("-total_bookings")
+        )
+
+        top_list = list(by_turf[:4])
+        if not top_list:
+            return Response({"detail": "No bookings found."},
+                status=status.HTTP_200_OK,
+            )
+
+        turf_ids = [row["court__turf_id"] for row in top_list]
+        turfs = Turf.objects.filter(id__in=turf_ids, is_open=True)
+        turf_map = {str(t.id): TurfSerializer(t).data for t in turfs}
+
+        results = []
+        for row in top_list:
+            tid = row["court__turf_id"]
+            turf_data = turf_map.get(str(tid))
+            if not turf_data:
+                continue
+            results.append({
+                    "turf": turf_data,
+                    "total_bookings": row["total_bookings"],
+                }
+            )
+
+        if not results:
+            return Response(
+                {"detail": "Most booked turfs are not available."},
+                status=status.HTTP_200_OK,
+            )
+
+        return Response(results, status=status.HTTP_200_OK)

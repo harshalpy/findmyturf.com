@@ -1,12 +1,13 @@
 from django.urls import path
-from app.views.payment import ConfirmPaymentView
+from app.views.payment import ConfirmPaymentView, CreateRazorpayOrderView, RazorpayWebhookView, RazorpayVerifyView
 from app.views.availability import CourtAvailableSlotsView
 from app.views.court import CourtCreateView, TurfCourtsView , GetCourtView , CourtUpdateView , CourtDeleteView
-from app.views.owner import OwnerTurfsView , OwnerTurfBookingsView
+from app.views.owner import OwnerTurfsView , OwnerTurfBookingsView , OwnerAnalyticsSummaryView , OwnerTurfAnalyticsView
 from app.views.auth import UserRegisterView, OwnerRegisterView, LoginView
-from app.views.turf import TurfCreateView, TurfUpdateView, TurfListView, TurfDetailView
+from app.views.turf import TurfCreateView , TurfUpdateView , TurfListView , TurfDetailView , MostBookedTurfView
 from app.views.turf_image import TurfImageUploadView , SetDefaultTurfImageView , DeleteTurfImageView
 from app.views.booking import BookingCreateView , MyBookingsView , BookingDetailView , CancelBookingView
+
 from app.views.feedback import FeedbackCreateView, OwnerFeedbackListView
 
 urlpatterns = [
@@ -17,6 +18,7 @@ urlpatterns = [
     # Public
     path("turf/list/", TurfListView.as_view()),
     path("turf/<uuid:turf_id>/", TurfDetailView.as_view()),
+        path("turf/most-booked/", MostBookedTurfView.as_view()),
 
     # turfs
     path("turf/create/", TurfCreateView.as_view()),
@@ -43,9 +45,15 @@ urlpatterns = [
     # Demo Payment Confirm Api
     path("payment/confirm/<uuid:booking_id>/", ConfirmPaymentView.as_view()),
 
+    # Razorpay
+    path('payment/razorpay/create/<uuid:booking_id>/', CreateRazorpayOrderView.as_view()),
+    path('payment/razorpay/webhook/', RazorpayWebhookView.as_view()),
+    path('payment/razorpay/verify/', RazorpayVerifyView.as_view()),
     # Owner Apis
     path("owner/turfs/", OwnerTurfsView.as_view()),
     path("owner/turf/<uuid:turf_id>/bookings/", OwnerTurfBookingsView.as_view()),
+    path("owner/analytics/summary/", OwnerAnalyticsSummaryView.as_view()),
+    path("owner/turf/<uuid:turf_id>/analytics/", OwnerTurfAnalyticsView.as_view()),
     
     # Feedback Api
     path("feedback/create/", FeedbackCreateView.as_view()),

@@ -4,10 +4,16 @@ from datetime import timedelta
 from dotenv import load_dotenv
 
 load_dotenv()
+PAYMENT_WINDOW_MINUTES = 15
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-z9l(xfyk5i0ruehq8d!eqk97_x^qeiixnjn23^h#mf4wwji)yu'
 DEBUG = True
-ALLOWED_HOSTS = []
+RAZORPAY_WEBHOOK_HOST = os.getenv("RAZORPAY_WEBHOOK_HOST") or ""
+ALLOWED_HOSTS = [
+    RAZORPAY_WEBHOOK_HOST ,
+    'localhost',
+    '127.0.0.1'
+]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -21,7 +27,9 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'cloudinary',
     'cloudinary_storage',
-    'app'
+    'app',
+    'corsheaders',
+    "drf_yasg",
 ]
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
@@ -108,8 +116,8 @@ DATABASES = {
         "NAME": os.getenv("DB_NAME"),
         "USER": os.getenv("DB_USER"),
         "PASSWORD": os.getenv("DB_PASSWORD"),
-        "HOST": os.getenv("DB_HOST", "localhost"),
-        "PORT": os.getenv("DB_PORT", "5432"),
+        "HOST": os.getenv("DB_HOST"),
+        "PORT": os.getenv("DB_PORT"),
     }
 }
 
@@ -122,3 +130,6 @@ CACHES = {
         }
     }
 }
+RAZORPAY_KEY_ID = os.getenv("RAZORPAY_KEY_ID", "")
+RAZORPAY_KEY_SECRET = os.getenv("RAZORPAY_KEY_SECRET", "")
+RAZORPAY_WEBHOOK_SECRET = os.getenv("RAZORPAY_WEBHOOK_SECRET", "")
