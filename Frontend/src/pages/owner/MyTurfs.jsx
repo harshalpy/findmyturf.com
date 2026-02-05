@@ -58,16 +58,23 @@ const MyTurfs = () => {
                             {turf.city}, {turf.state}
                         </div>
                         <div className="mt-3 flex flex-wrap gap-2">
-                            <Button as={Link} variant="secondary" size="sm" to={`/owner/turfs/${turf.id}/edit`}>
-                                Edit
-                            </Button>
-                            <Button as={Link} variant="secondary" size="sm" to={`/owner/bookings?tid=${turf.id}`}>
-                                Bookings
-                            </Button>
-                            <Button as={Link} variant="secondary" size="sm" to={`/owner/courts?tid=${turf.id}`}>
-                                Courts
-                            </Button>
-                        </div>
+    <Button as={Link} variant="secondary" size="sm" to={`/owner/turfs/${turf.id}/edit`}>
+        Edit
+    </Button>
+
+    <Button as={Link} variant="secondary" size="sm" to={`/owner/bookings?tid=${turf.id}`}>
+        Bookings
+    </Button>
+
+    <Button as={Link} variant="secondary" size="sm" to={`/owner/courts?tid=${turf.id}`}>
+        Courts
+    </Button>
+
+    <Button as={Link} variant="secondary" size="sm" to={`/owner/feedbacks?tid=${turf.id}`}>
+        Feedback
+    </Button>
+</div>
+
                     </div>
                 ))}
             </div>

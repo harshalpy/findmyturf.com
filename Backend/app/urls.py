@@ -7,6 +7,7 @@ from app.views.auth import UserRegisterView, OwnerRegisterView, LoginView
 from app.views.turf import TurfCreateView, TurfUpdateView, TurfListView, TurfDetailView
 from app.views.turf_image import TurfImageUploadView , SetDefaultTurfImageView , DeleteTurfImageView
 from app.views.booking import BookingCreateView , MyBookingsView , BookingDetailView , CancelBookingView
+from app.views.feedback import FeedbackCreateView, OwnerFeedbackListView
 
 urlpatterns = [
     path("auth/login/", LoginView.as_view()),
@@ -45,4 +46,8 @@ urlpatterns = [
     # Owner Apis
     path("owner/turfs/", OwnerTurfsView.as_view()),
     path("owner/turf/<uuid:turf_id>/bookings/", OwnerTurfBookingsView.as_view()),
+    
+    # Feedback Api
+    path("feedback/create/", FeedbackCreateView.as_view()),
+    path("owner/feedbacks/", OwnerFeedbackListView.as_view()),
 ]

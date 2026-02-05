@@ -61,7 +61,8 @@ const BookingDetail = () => {
         </Button>
       </div>
       <BookingSummary booking={booking} />
-      <div className="flex gap-3">
+      {(booking.status != 'CANCELLED' && booking.status != 'CONFIRMED') && (
+        <div className="flex gap-3">
         <Button variant="secondary" onClick={handleCancel} disabled={loading}>
           Cancel booking
         </Button>
@@ -69,6 +70,7 @@ const BookingDetail = () => {
           Pay now
         </Button>
       </div>
+      )}
       {error && <p className="text-sm text-rose-600">{error}</p>}
       {info && <p className="text-sm text-emerald-700">{info}</p>}
     </div>

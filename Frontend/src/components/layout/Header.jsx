@@ -21,6 +21,7 @@ const Header = () => {
             ? [
                 { name: 'Dashboard', path: '/owner/dashboard' },
                 { name: 'My Turfs', path: '/owner/turfs' },
+                { name: 'Feedback', path: '/owner/feedbacks' },
             ]
             : []),
         ...(isAuthenticated ? [{ name: 'My Bookings', path: '/user/bookings' }] : []),

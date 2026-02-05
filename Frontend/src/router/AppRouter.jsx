@@ -19,7 +19,9 @@ import EditCourt from '../pages/owner/EditCourt.jsx';
 import Header from '../components/layout/Header.jsx';
 import Footer from '../components/layout/Footer.jsx';
 import useAuth from '../hooks/useAuth.js';
-
+import OwnerFeedbacks from '../pages/owner/OwnFeedbacks.jsx';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const ProtectedRoute = ({ roles }) => {
   const { isAuthenticated, role } = useAuth();
   const location = useLocation();
@@ -36,10 +38,22 @@ const ProtectedRoute = ({ roles }) => {
 const Shell = () => (
   <div className="flex min-h-screen flex-col bg-slate-50 text-slate-900">
     <Header />
+
     <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-6">
       <Outlet />
     </main>
+
     <Footer />
+
+    {/* ADD THIS */}
+    <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        newestOnTop
+        closeOnClick
+        pauseOnHover
+        theme="colored"
+    />
   </div>
 );
 
@@ -64,6 +78,7 @@ const AppRouter = () => (
         <Route path="/owner/turfs/add" element={<AddTurf />} />
         <Route path="/owner/turfs/:id/edit" element={<EditTurf />} />
         <Route path="/owner/bookings" element={<TurfBookings />} />
+        <Route path="/owner/feedbacks" element={<OwnerFeedbacks />} />
         <Route path="/owner/courts" element={<MyCourts />} />
         <Route path="/owner/courts/add" element={<AddCourt />} />
         <Route path="/owner/courts/:id/edit" element={<EditCourt />} />

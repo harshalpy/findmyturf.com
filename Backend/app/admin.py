@@ -7,7 +7,7 @@ from app.models.turf import Turf
 from app.models.turf_image import TurfImage
 from app.models.court import Court
 from app.models.booking import Booking
-
+from app.models.feedback import Feedback
 
 @admin.register(User)
 class UserAdmin(BaseUserAdmin):
@@ -140,3 +140,45 @@ class BookingAdmin(admin.ModelAdmin):
         queryset.update(status="CANCELLED", payment_status="REFUNDED")
 
     mark_cancelled.short_description = "Cancel & Refund selected bookings"
+
+@admin.register(Feedback)
+class FeedbackAdmin(admin.ModelAdmin):
+
+    def has_view_permission(self, request, obj=None):
+        return request.user.is_staff
+
+    def has_change_permission(self, request, obj=None):
+        return False   # feedback should not be edited
+
+    def has_delete_permission(self, request, obj=None):
+        return request.user.is_superuser
+
+    list_display = (
+        "id",
+        "user",
+        "turf",
+        "rating",
+        "message",
+        "created_at",
+    )
+
+    list_filter = (
+        "rating",
+        "created_at",
+        "turf__city",
+    )
+
+    search_fields = (
+        "user__phone_no",
+        "turf__name",
+        "message",
+    )
+
+    readonly_fields = (
+        "id",
+        "user",
+        "turf",
+        "rating",
+        "message",
+        "created_at",
+    )
