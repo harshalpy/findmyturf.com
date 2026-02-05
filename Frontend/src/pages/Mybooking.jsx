@@ -37,11 +37,14 @@ export default function MyBookings() {
                 <div className="mx-auto max-w-5xl space-y-6">
 
                     {/* HEADER */}
-                    <div className="rounded-3xl bg-white p-6 shadow-sm">
-                        <h1 className="text-2xl font-bold text-slate-900">
+                    <div className="overflow-hidden rounded-lg bg-linear-to-r from-slate-900 via-slate-900 to-slate-800 p-6 text-white shadow-sm">
+                        <p className="text-xs font-medium uppercase tracking-[0.2em] text-slate-300">
                             My Bookings
+                        </p>
+                        <h1 className="mt-2 text-2xl font-semibold sm:text-3xl">
+                            Your upcoming and past turf sessions
                         </h1>
-                        <p className="mt-1 text-sm text-slate-600">
+                        <p className="mt-1 text-sm text-slate-300">
                             View and manage your turf bookings
                         </p>
                     </div>
@@ -56,7 +59,7 @@ export default function MyBookings() {
                     ) : bookings.length === 0 ? (
 
                         /* EMPTY STATE */
-                        <div className="rounded-3xl bg-white/95 backdrop-blur p-10 text-center shadow-lg">
+                        <div className="rounded-lg bg-white/80 backdrop-blur p-10 text-center shadow-lg transition duration-300 hover:scale-105">
                             <p className="text-lg font-semibold text-slate-700">
                                 No bookings yet ⚽
                             </p>
@@ -70,7 +73,7 @@ export default function MyBookings() {
                                 <div
                                     key={booking.id}
                                     onClick={() => navigate(`/booking/${booking.id}`)}
-                                    className="cursor-pointer rounded-2xl bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+                                    className="cursor-pointer rounded-lg bg-white/80 p-5 shadow-sm transition duration-300 hover:scale-105 hover:shadow-md"
                                 >
                                     <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
 

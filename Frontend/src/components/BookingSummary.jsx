@@ -7,7 +7,7 @@ export default function BookingSummary({ selectedSlots, price }) {
     const totalAmount = hours * price;
 
     return (
-        <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+        <div className="mt-6 rounded-lg border border-slate-200 bg-white/80 p-5 shadow-sm transition duration-300 hover:scale-105">
             <h3 className="mb-3 text-sm font-semibold text-slate-900">
                 Booking Summary
             </h3>

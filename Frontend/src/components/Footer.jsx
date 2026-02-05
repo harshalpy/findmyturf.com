@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export default function Footer() {
   const year = new Date().getFullYear();
 
@@ -23,9 +25,21 @@ export default function Footer() {
               Product
             </h4>
             <ul className="space-y-1">
-              <li>Explore turfs</li>
-              <li>My bookings</li>
-              <li>Owner dashboard</li>
+              <li>
+                <Link to="/turfs" className="hover:text-white">
+                  Explore turfs
+                </Link>
+              </li>
+              <li>
+                <Link to="/my-bookings" className="hover:text-white">
+                  My bookings
+                </Link>
+              </li>
+              <li>
+                <Link to="/owner/turfs" className="hover:text-white">
+                  Owner dashboard
+                </Link>
+              </li>
             </ul>
           </div>
 
@@ -34,9 +48,21 @@ export default function Footer() {
               Company
             </h4>
             <ul className="space-y-1">
-              <li>About</li>
-              <li>Contact</li>
-              <li>Popular turfs</li>
+              <li>
+                <Link to="/about" className="hover:text-white">
+                  About
+                </Link>
+              </li>
+              <li>
+                <Link to="/contact" className="hover:text-white">
+                  Contact
+                </Link>
+              </li>
+              <li>
+                <Link to="/popular-turfs" className="hover:text-white">
+                  Popular turfs
+                </Link>
+              </li>
             </ul>
           </div>
 
@@ -47,9 +73,21 @@ export default function Footer() {
             {/* TODO: Backend support required for static content CMS
                 Frontend ready to link to legal pages. */}
             <ul className="space-y-1">
-              <li>Terms &amp; conditions</li>
-              <li>Privacy policy</li>
-              <li>Refund policy</li>
+              <li>
+                <Link to="/about" className="hover:text-white">
+                  Terms &amp; conditions
+                </Link>
+              </li>
+              <li>
+                <Link to="/contact" className="hover:text-white">
+                  Privacy policy
+                </Link>
+              </li>
+              <li>
+                <Link to="/popular-turfs" className="hover:text-white">
+                  Refund policy
+                </Link>
+              </li>
             </ul>
           </div>
         </div>

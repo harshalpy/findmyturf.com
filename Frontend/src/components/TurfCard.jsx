@@ -48,15 +48,20 @@ export default function TurfCard({ turf }) {
     return (
         <div
             onClick={() => navigate(`/turf/${turf.id}`)}
-            className="group cursor-pointer overflow-hidden rounded-2xl bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+            className="group cursor-pointer overflow-hidden rounded-lg bg-white/80 shadow-sm transition duration-300 hover:scale-105 hover:shadow-lg"
         >
             {/* IMAGE */}
-            <div className="relative h-48 w-full overflow-hidden">
+            <div className="relative h-40 w-full overflow-hidden">
                 <img
                     src={getTurfImage(turf)}
                     alt={turf.name}
                     className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
+                {ratingText && (
+                    <div className="absolute left-3 top-3 rounded-full bg-black/70 px-3 py-1 text-xs font-medium text-white">
+                        ★ {ratingText}
+                    </div>
+                )}
                 {turf.distance_km && (
                     <div className="absolute right-3 top-3 rounded-full bg-black/70 px-3 py-1 text-xs font-medium text-white">
                         {turf.distance_km} km
@@ -69,7 +74,7 @@ export default function TurfCard({ turf }) {
                 {/* NAME + STATUS */}
                 <div className="flex items-start justify-between gap-3">
                     <div className="space-y-1">
-                        <h3 className="truncate text-lg font-semibold text-slate-900">
+                        <h3 className="truncate text-base font-semibold text-slate-900">
                             {turf.name}
                         </h3>
                         <p className="text-xs text-slate-500">
@@ -78,18 +83,6 @@ export default function TurfCard({ turf }) {
                         <p className="text-xs text-slate-500">
                             {turf.opening_time?.slice(0, 5)} – {turf.closing_time?.slice(0, 5)}
                         </p>
-
-                        {/* Rating badge */}
-                        {ratingText && (
-                            <div className="mt-1 inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-1 text-[11px] font-medium text-emerald-700">
-                                <span>★</span>
-                                <span>{ratingText}</span>
-                                <span className="text-slate-400">
-                                    {/* TODO: Backend support required
-                                        Frontend ready to show rating count once available */}
-                                </span>
-                            </div>
-                        )}
                     </div>
 
                     <span
@@ -103,7 +96,7 @@ export default function TurfCard({ turf }) {
                     </span>
                 </div>
 
-                <div className="mt-3 flex items-center justify-between">
+                <div className="mt-2 flex items-center justify-between">
                     {displayPrice !== null && (
                         <span className="text-base font-bold text-slate-900">
                             ₹{displayPrice}
@@ -112,9 +105,6 @@ export default function TurfCard({ turf }) {
                             </span>
                         </span>
                     )}
-                    <span className="rounded-lg bg-emerald-500 px-3 py-1.5 text-sm font-medium text-white shadow-sm group-hover:bg-emerald-600">
-                        View Courts
-                    </span>
                 </div>
             </div>
         </div>

@@ -4,18 +4,11 @@ export default function Hero() {
   const navigate = useNavigate();
 
   return (
-    <section className="relative flex-1">
-      {/* Background stadium image */}
-      <div className="absolute inset-0 -z-10">
-        <img
-          src="https://images.pexels.com/photos/399187/pexels-photo-399187.jpeg?auto=compress&cs=tinysrgb&w=1600"
-          alt="Night stadium"
-          className="h-full w-full object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/60 to-black/80" />
-      </div>
+    <section className="relative flex-1 bg-[url('https://images.pexels.com/photos/399187/pexels-photo-399187.jpeg?auto=compress&cs=tinysrgb&w=1600')] bg-fixed bg-cover bg-center bg-no-repeat">
+      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-black/80 via-black/60 to-black/80" />
 
-      <div className="mx-auto flex min-h-[calc(100vh-4rem)] max-w-7xl flex-col justify-center px-6 py-16 lg:flex-row lg:items-center lg:gap-14">
+      <div className="mx-auto flex min-h-[calc(100vh-4rem)] max-w-7xl flex-col justify-center px-6 py-12 lg:flex-row lg:items-center lg:gap-12">
+
         {/* LEFT COPY */}
         <div className="max-w-xl space-y-6 text-white">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-300">
@@ -47,78 +40,40 @@ export default function Hero() {
 
         {/* RIGHT – Search hero card */}
         <div className="mt-10 w-full max-w-md lg:mt-0 lg:w-[420px]">
-          <div className="rounded-3xl bg-white/95 p-6 shadow-xl shadow-black/30 backdrop-blur">
-            <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+          <div className="rounded-xl bg-white/10 p-6 shadow-xl backdrop-blur-lg border border-white/20">
+            <p className="text-xs font-semibold uppercase tracking-wide text-emerald-200">
               Find turfs near you
             </p>
+            <h3 className="mt-3 text-2xl font-semibold text-white">
+              Discover the closest turfs with live pricing.
+            </h3>
+            <p className="mt-2 text-sm text-slate-200/80">
+              Jump straight into Explore to filter by sport, budget, and distance.
+            </p>
 
-            <div className="mt-4 space-y-3">
-              <div className="space-y-1 text-sm">
-                <label className="text-slate-700">City or area</label>
-                <input
-                  placeholder="Search by city"
-                  className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
-                />
-              </div>
-
-              <div className="grid gap-3 sm:grid-cols-2">
-                <div className="space-y-1 text-sm">
-                  <label className="text-slate-700">Sport</label>
-                  <select className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500">
-                    <option>Any sport</option>
-                    <option>Football</option>
-                    <option>Cricket</option>
-                    <option>Badminton</option>
-                    <option>Tennis</option>
-                  </select>
-                </div>
-
-                <div className="space-y-1 text-sm">
-                  <label className="text-slate-700">Date</label>
-                  <input
-                    type="date"
-                    className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm text-slate-900 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-1 text-sm">
-                <label className="text-slate-700">Budget (₹/hour)</label>
-                <div className="grid grid-cols-2 gap-3">
-                  <input
-                    type="number"
-                    placeholder="Min"
-                    className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
-                  />
-                  <input
-                    type="number"
-                    placeholder="Max"
-                    className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <button
-              type="button"
-              onClick={() => navigate("/turfs")}
-              className="mt-5 w-full rounded-xl bg-emerald-500 py-3 text-sm font-semibold text-white shadow-sm hover:bg-emerald-600"
-            >
-              Search turfs
-            </button>
-
-            <p className="mt-3 text-center text-[11px] text-slate-500">
-              Looking to list your facility?{" "}
+            <div className="mt-5 flex flex-col gap-3 sm:flex-row">
+              <button
+                type="button"
+                onClick={() => navigate("/turfs")}
+                className="w-full rounded-lg bg-emerald-500 py-3 text-sm font-semibold text-white shadow-sm hover:bg-emerald-600"
+              >
+                Explore turfs
+              </button>
               <button
                 type="button"
                 onClick={() => navigate("/login")}
-                className="font-semibold text-emerald-600 underline underline-offset-2"
+                className="w-full rounded-lg border border-white/30 bg-white/10 py-3 text-sm font-semibold text-white hover:bg-white/20"
               >
-                Sign in as owner
+                List your turf
               </button>
+            </div>
+
+            <p className="mt-4 text-center text-[11px] text-slate-200/70">
+              Instant bookings. Transparent pricing. Owner-friendly tools.
             </p>
           </div>
         </div>
+
       </div>
     </section>
   );

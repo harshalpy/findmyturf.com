@@ -69,11 +69,11 @@ export default function Register() {
     }
 
     return (
-            <div className="min-h-screen bg-[url('https://images.pexels.com/photos/399187/pexels-photo-399187.jpeg?auto=compress&cs=tinysrgb&w=1200')] bg-cover bg-center">
-                <div className="min-h-screen bg-slate-950/70 px-4 py-12">
-                    <div className="mx-auto flex max-w-5xl flex-col items-center gap-10 lg:flex-row">
-                        <div className="w-full text-slate-50 lg:w-1/2">
-                            <h1 className="text-3xl font-bold">
+            <div className="min-h-screen bg-[url('https://images.pexels.com/photos/399187/pexels-photo-399187.jpeg?auto=compress&cs=tinysrgb&w=1200')] bg-fixed bg-cover bg-center bg-no-repeat">
+                <div className="min-h-screen bg-slate-950/70 px-4 py-10">
+                    <div className="mx-auto flex min-h-screen max-w-lg flex-col items-center justify-center gap-6 text-center text-slate-50">
+                        <div className="w-full">
+                            <h1 className="text-3xl font-bold sm:text-4xl">
                                 Create your FindMyTurf account
                             </h1>
                             <p className="mt-3 text-sm text-slate-200">
@@ -82,20 +82,20 @@ export default function Register() {
                             </p>
                         </div>
 
-                        <div className="w-full max-w-md rounded-2xl bg-white/95 p-8 shadow lg:w-1/2">
-                    <h2 className="text-xl font-bold text-center text-slate-900">
+                        <div className="w-full rounded-lg bg-white/10 p-6 shadow-xl backdrop-blur-lg border border-white/20 transition duration-300 hover:scale-105">
+                    <h2 className="text-xl font-bold text-center text-white">
                         Create Account
                     </h2>
 
                     {/* ROLE SWITCH */}
-                    <div className="mt-4 flex overflow-hidden rounded-xl border bg-slate-50">
+                    <div className="mt-4 flex overflow-hidden rounded-lg border border-white/20 bg-white/10">
                         <button
                             type="button"
                             onClick={() => setRole("user")}
                             className={`flex-1 py-2 text-sm font-medium ${
                                 role === "user"
                                     ? "bg-emerald-500 text-white"
-                                    : "bg-transparent text-slate-700"
+                                    : "bg-transparent text-slate-200"
                             }`}
                         >
                             User
@@ -107,16 +107,16 @@ export default function Register() {
                             className={`flex-1 py-2 text-sm font-medium ${
                                 role === "owner"
                                     ? "bg-emerald-500 text-white"
-                                    : "bg-transparent text-slate-700"
+                                    : "bg-transparent text-slate-200"
                             }`}
                         >
                             Business
                         </button>
                     </div>
 
-                    <form onSubmit={handleRegister} className="mt-6 space-y-4">
+                    <form onSubmit={handleRegister} className="mt-6 space-y-5">
                         {error && (
-                            <div className="rounded-xl bg-red-50 px-4 py-2 text-sm text-red-600">
+                            <div className="rounded-lg bg-red-500/10 px-4 py-2 text-sm text-red-200">
                                 {error}
                             </div>
                         )}
@@ -156,7 +156,7 @@ export default function Register() {
 
                         <button
                             disabled={loading}
-                            className={`w-full rounded-xl py-3 text-sm font-semibold transition ${
+                            className={`w-full rounded-lg py-3 text-sm font-semibold transition ${
                                 loading
                                     ? "bg-slate-300 animate-pulse"
                                     : "bg-emerald-500 text-white hover:bg-emerald-600"
@@ -166,9 +166,9 @@ export default function Register() {
                         </button>
                     </form>
 
-                    <p className="text-center text-sm text-slate-500">
+                    <p className="text-center text-sm text-slate-200">
                         Already have an account?{" "}
-                        <Link to="/login" className="font-medium text-emerald-600">
+                        <Link to="/login" className="font-medium text-emerald-300">
                             Login
                         </Link>
                     </p>

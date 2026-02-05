@@ -27,23 +27,23 @@ export default function Features() {
   ];
 
   return (
-    <section className="py-20">
-      <div className="max-w-7xl mx-auto px-6">
+    <section className="py-14">
+      <div className="mx-auto max-w-7xl px-6">
 
-        <div className="text-center mb-14">
+        <div className="mb-10 text-center">
           <h3 className="text-3xl font-bold text-slate-900">
             Everything You Need to Book Turfs
           </h3>
-          <p className="text-slate-600 mt-3">
+          <p className="mt-3 text-slate-600">
             Built for players and turf owners both.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid gap-5 md:grid-cols-3">
           {items.map((f, i) => (
             <div
               key={i}
-              className="bg-white p-7 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition"
+              className="rounded-lg border border-slate-200 bg-white/80 p-6 shadow-sm transition duration-300 hover:scale-105 hover:shadow-md"
             >
               <h4 className="font-semibold text-lg text-slate-900 mb-2">
                 {f.title}

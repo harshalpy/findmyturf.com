@@ -63,10 +63,10 @@ export default function SlotSelector({
                             key={`${slot.start_time}-${slot.end_time}`}
                             onClick={() => handleSlotClick(slot)}
                             className={`
-                relative rounded-xl border px-3 py-2 text-sm font-medium transition
+                relative rounded-lg border px-3 py-2 text-sm font-medium transition duration-300 hover:scale-105
                 ${selected
                                     ? "border-slate-900 bg-slate-900 text-white shadow-sm"
-                                    : "border-slate-200 bg-white text-slate-700 hover:border-slate-900 hover:bg-slate-50"
+                                    : "border-white/30 bg-white/80 text-slate-700 hover:border-slate-900"
                                 }
               `}
                         >

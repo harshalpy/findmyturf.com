@@ -89,17 +89,10 @@ export default function Turfs() {
   return (
     <div className="min-h-screen bg-slate-50">
       {/* HERO with grass background & filter bar like reference */}
-      <section className="relative">
-        <div className="absolute inset-0">
-          <img
-            src="https://images.pexels.com/photos/2570139/pexels-photo-2570139.jpeg?auto=compress&cs=tinysrgb&w=1600"
-            alt="Turf background"
-            className="h-full w-full object-cover"
-          />
-          <div className="absolute inset-0 bg-black/50" />
-        </div>
+      <section className="relative bg-[url('https://images.pexels.com/photos/2570139/pexels-photo-2570139.jpeg?auto=compress&cs=tinysrgb&w=1600')] bg-fixed bg-cover bg-center bg-no-repeat">
+        <div className="absolute inset-0 bg-black/55" />
 
-        <div className="relative mx-auto flex max-w-6xl flex-col items-center px-4 py-12 text-center text-white sm:px-6 lg:py-16">
+        <div className="relative mx-auto flex max-w-6xl flex-col items-center px-4 py-10 text-center text-white sm:px-6 lg:py-14">
           <h1 className="text-3xl font-bold sm:text-4xl">
             Best turf booking platform in your area
           </h1>
@@ -109,8 +102,8 @@ export default function Turfs() {
           </p>
 
           {/* Filter/search bar floating over hero */}
-          <div className="mt-8 w-full max-w-4xl rounded-2xl bg-white p-3 shadow-2xl shadow-black/40">
-            <div className="grid gap-3 md:grid-cols-5">
+          <div className="mt-6 w-full max-w-4xl rounded-xl bg-white/10 p-3 shadow-2xl shadow-black/40 backdrop-blur-lg border border-white/20">
+            <div className="grid gap-3 md:grid-cols-6">
               {/* Sport type (frontend-safe) */}
               <div className="md:col-span-1">
                 <select
@@ -118,7 +111,7 @@ export default function Turfs() {
                   onChange={(e) =>
                     setFilters((prev) => ({ ...prev, sports_type: e.target.value }))
                   }
-                  className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs text-slate-900 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 sm:text-sm"
+                  className="w-full rounded-lg border border-white/20 bg-white/90 px-3 py-2 text-xs text-slate-900 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 sm:text-sm"
                 >
                   <option value="">Any sport</option>
                   <option value="FOOTBALL">Football</option>
@@ -139,20 +132,31 @@ export default function Turfs() {
                   onChange={(e) =>
                     setFilters((prev) => ({ ...prev, city: e.target.value }))
                   }
-                  className="w-full rounded-xl border border-slate-200 px-3 py-2 text-xs text-slate-900 placeholder-slate-400 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 sm:text-sm"
+                  className="w-full rounded-lg border border-white/20 bg-white/90 px-3 py-2 text-xs text-slate-900 placeholder-slate-400 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 sm:text-sm"
                 />
               </div>
 
-              {/* Date (frontend-only) */}
+              {/* Nearby distance */}
               <div>
-                <input
-                  type="date"
-                  className="w-full rounded-xl border border-slate-200 px-3 py-2 text-xs text-slate-900 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 sm:text-sm"
-                />
+                <select
+                  value={filters.radius}
+                  onChange={(e) =>
+                    setFilters((prev) => ({
+                      ...prev,
+                      radius: Number(e.target.value),
+                    }))
+                  }
+                  className="w-full rounded-lg border border-white/20 bg-white/90 px-3 py-2 text-xs text-slate-900 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 sm:text-sm"
+                >
+                  <option value={5}>Within 5 km</option>
+                  <option value={10}>Within 10 km</option>
+                  <option value={25}>Within 25 km</option>
+                  <option value={40}>Within 40 km</option>
+                </select>
               </div>
 
-              {/* Price search + button */}
-              <div className="flex items-stretch gap-2">
+              {/* Search + button */}
+              <div className="flex items-stretch gap-2 md:col-span-2">
                 <input
                   type="text"
                   placeholder="Search turf"
@@ -160,12 +164,12 @@ export default function Turfs() {
                   onChange={(e) =>
                     setFilters((prev) => ({ ...prev, search: e.target.value }))
                   }
-                  className="hidden flex-1 rounded-xl border border-slate-200 px-3 py-2 text-xs text-slate-900 placeholder-slate-400 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 sm:block sm:text-sm"
+                  className="flex-1 rounded-lg border border-white/20 bg-white/90 px-3 py-2 text-xs text-slate-900 placeholder-slate-400 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 sm:text-sm"
                 />
                 <button
                   type="button"
                   onClick={() => refetch()}
-                  className="flex w-full items-center justify-center rounded-xl bg-emerald-500 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-emerald-600 md:w-auto"
+                  className="flex items-center justify-center rounded-lg bg-emerald-500 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-emerald-600"
                 >
                   Search
                 </button>
@@ -176,7 +180,7 @@ export default function Turfs() {
       </section>
 
       {/* LIST + sections on light background */}
-      <div className="px-4 pb-12 pt-8 sm:px-6">
+      <div className="px-4 pb-12 pt-6 sm:px-6">
       <div className="mx-auto max-w-6xl space-y-8">
         {loading ? (
           <ListShimmerGrid
@@ -186,7 +190,7 @@ export default function Turfs() {
           />
         ) : turfs.length === 0 && error ? (
           // Full error fallback only when there is NO data yet
-          <div className="flex flex-col items-center justify-center gap-3 rounded-2xl bg-white py-16 text-center shadow-sm">
+          <div className="flex flex-col items-center justify-center gap-3 rounded-lg bg-white/80 py-14 text-center shadow-sm">
             <p className="text-sm font-medium text-red-600">
               We couldn&apos;t load turfs right now.
             </p>
@@ -203,7 +207,7 @@ export default function Turfs() {
           </div>
         ) : turfs.length === 0 ? (
           // Confirmed empty state: only after successful fetch with no results
-          <div className="flex flex-col items-center justify-center py-24 text-slate-500">
+          <div className="flex flex-col items-center justify-center py-20 text-slate-500">
             <h3 className="mb-2 text-lg font-semibold">No turfs found</h3>
             <p className="text-sm">Try changing filters or location.</p>
           </div>
@@ -211,7 +215,7 @@ export default function Turfs() {
           <>
             {/* If we have some data but latest fetch failed, show a soft banner instead of hiding results */}
             {error && (
-              <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-xs text-amber-700">
+              <div className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-xs text-amber-700">
                 Some turfs may be out of date due to a network issue. Showing
                 the last loaded list.{" "}
                 <button
@@ -225,7 +229,7 @@ export default function Turfs() {
             )}
 
             {/* GRID */}
-            <div className="grid grid-cols-1 gap-7 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
               {turfs.map((turf) => (
                 <TurfCard key={turf.id} turf={turf} />
               ))}
@@ -233,7 +237,7 @@ export default function Turfs() {
 
             {/* PAGINATION */}
             {totalPages > 1 && (
-              <div className="mt-10 flex items-center justify-center gap-4">
+              <div className="mt-8 flex items-center justify-center gap-4">
                 <button
                   disabled={page === 1}
                   onClick={() => setPage((p) => p - 1)}
@@ -271,13 +275,13 @@ export default function Turfs() {
           {/* TODO: Backend support required for popular turfs ranking
               Frontend ready – wire to analytics / popularity API and reuse TurfCard */}
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-            <div className="h-32 rounded-2xl bg-linear-to-tr from-emerald-500/10 to-emerald-500/5 border border-emerald-100 flex items-center justify-center text-xs text-emerald-700">
+            <div className="h-32 rounded-lg bg-linear-to-tr from-emerald-500/10 to-emerald-500/5 border border-emerald-100 flex items-center justify-center text-xs text-emerald-700 transition duration-300 hover:scale-105">
               Popular turfs will appear here.
             </div>
-            <div className="h-32 rounded-2xl bg-white shadow-sm border border-slate-100 flex items-center justify-center text-xs text-slate-500">
+            <div className="h-32 rounded-lg bg-white/80 shadow-sm border border-slate-100 flex items-center justify-center text-xs text-slate-500 transition duration-300 hover:scale-105">
               Hooked to same list API – filter by rating once backend is ready.
             </div>
-            <div className="h-32 rounded-2xl bg-white shadow-sm border border-slate-100 flex items-center justify-center text-xs text-slate-500">
+            <div className="h-32 rounded-lg bg-white/80 shadow-sm border border-slate-100 flex items-center justify-center text-xs text-slate-500 transition duration-300 hover:scale-105">
               Design only, safe for DB.
             </div>
           </div>
@@ -295,16 +299,16 @@ export default function Turfs() {
           {/* TODO: Backend support required for visit / booking stats
               Frontend ready – attach to stats endpoint in future. */}
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-4">
-            <div className="h-24 rounded-2xl bg-white shadow-sm border border-slate-100 flex items-center justify-center text-xs text-slate-500">
+            <div className="h-24 rounded-lg bg-white/80 shadow-sm border border-slate-100 flex items-center justify-center text-xs text-slate-500 transition duration-300 hover:scale-105">
               Turf visit stats placeholder
             </div>
-            <div className="h-24 rounded-2xl bg-white shadow-sm border border-slate-100 flex items-center justify-center text-xs text-slate-500">
+            <div className="h-24 rounded-lg bg-white/80 shadow-sm border border-slate-100 flex items-center justify-center text-xs text-slate-500 transition duration-300 hover:scale-105">
               Will show bookings count
             </div>
-            <div className="h-24 rounded-2xl bg-white shadow-sm border border-slate-100 flex items-center justify-center text-xs text-slate-500">
+            <div className="h-24 rounded-lg bg-white/80 shadow-sm border border-slate-100 flex items-center justify-center text-xs text-slate-500 transition duration-300 hover:scale-105">
               Safe UI-only section
             </div>
-            <div className="h-24 rounded-2xl bg-white shadow-sm border border-slate-100 flex items-center justify-center text-xs text-slate-500">
+            <div className="h-24 rounded-lg bg-white/80 shadow-sm border border-slate-100 flex items-center justify-center text-xs text-slate-500 transition duration-300 hover:scale-105">
               No schema or API changes
             </div>
           </div>
