@@ -1,8 +1,7 @@
 import api from "../../api";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import useAuth from "../../hooks/useAuth";
 import { useNavigate, Link } from "react-router-dom";
-import { FormShimmer, ImageBlockShimmer } from "../../components/Shimmers";
 
 export default function Login() {
   const { login } = useAuth();
@@ -11,14 +10,7 @@ export default function Login() {
   const [phone_no, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [pageLoading, setPageLoading] = useState(true);
   const [error, setError] = useState("");
-
-  // page shimmer load
-  useEffect(() => {
-    const t = setTimeout(() => setPageLoading(false), 700);
-    return () => clearTimeout(t);
-  }, []);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -45,26 +37,11 @@ export default function Login() {
     }
   };
 
-  if (pageLoading) {
-    return (
-      <div className="min-h-screen bg-slate-900/90 px-4 py-12">
-        <div className="mx-auto flex max-w-5xl flex-col items-center gap-10 lg:flex-row">
-          <div className="w-full lg:w-1/2">
-            <ImageBlockShimmer />
-          </div>
-          <div className="w-full lg:w-1/2">
-            <FormShimmer />
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="min-h-screen bg-[url('https://images.pexels.com/photos/399187/pexels-photo-399187.jpeg?auto=compress&cs=tinysrgb&w=1200')] bg-fixed bg-cover bg-center bg-no-repeat">
-      <div className="min-h-screen bg-slate-950/70 px-4 py-10">
-        <div className="mx-auto flex min-h-screen max-w-lg flex-col items-center justify-center gap-6 text-center text-slate-50">
-          <div className="w-full">
+    <div className="fixed inset-0 overflow-hidden bg-[url('https://images.pexels.com/photos/399187/pexels-photo-399187.jpeg?auto=compress&cs=tinysrgb&w=1200')] bg-cover bg-center bg-no-repeat">
+      <div className="fixed inset-0 overflow-hidden bg-slate-950/70 flex items-center justify-center px-4">
+        <div className="w-full max-w-lg">
+          <div className="text-center text-slate-50 mb-6">
             <h1 className="text-3xl font-bold sm:text-4xl">
               Welcome back to FindMyTurf
             </h1>
@@ -87,7 +64,7 @@ export default function Login() {
               )}
 
               <input
-                className="input"
+                className="w-full border border-white/30 rounded-xl px-4 py-2 bg-white/90 text-slate-900 placeholder-slate-500 focus:ring-2 focus:ring-emerald-500 outline-none"
                 placeholder="Phone number"
                 value={phone_no}
                 onChange={(e) => setPhone(e.target.value)}
@@ -95,7 +72,7 @@ export default function Login() {
               />
 
               <input
-                className="input"
+                className="w-full border border-white/30 rounded-xl px-4 py-2 bg-white/90 text-slate-900 placeholder-slate-500 focus:ring-2 focus:ring-emerald-500 outline-none"
                 type="password"
                 placeholder="Password"
                 value={password}
@@ -105,18 +82,17 @@ export default function Login() {
 
               <button
                 disabled={loading}
-                className={`w-full rounded-lg py-3 text-sm font-semibold transition ${
-                  loading
+                className={`w-full rounded-lg py-3 text-sm font-semibold transition ${loading
                     ? "bg-slate-300 animate-pulse"
                     : "bg-emerald-500 text-white hover:bg-emerald-600"
-                }`}
+                  }`}
               >
                 {loading ? "Signing in..." : "Login"}
               </button>
             </form>
 
             <p className="mt-5 text-center text-sm text-slate-200">
-              Don’t have an account?{" "}
+              Don't have an account?{" "}
               <Link to="/register" className="font-medium text-emerald-300">
                 Register
               </Link>

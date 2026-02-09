@@ -63,7 +63,7 @@ export default function SportsCategories() {
       <div className="absolute inset-0 bg-gradient-to-b from-slate-950/80 via-slate-900/70 to-slate-950/80" />
 
       {/* CONTENT */}
-      <div className="relative z-10 flex h-full items-center px-4 sm:px-6 pt-30 pb-31">
+      <div className="relative z-10 flex h-full items-center px-4 sm:px-6 pt-32 pb-32">
         <div className="mx-auto w-full max-w-6xl space-y-8">
           {/* HEADER */}
           <div className="space-y-2 text-center">

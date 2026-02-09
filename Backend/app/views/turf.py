@@ -59,12 +59,17 @@ class TurfListView(APIView):
         city = request.query_params.get("city")
         min_price = request.query_params.get("min_price")
         max_price = request.query_params.get("max_price")
-
+        sports_type = request.query_params.get("sports_type")
         search = request.query_params.get("search")
         if search:
             queryset = queryset.filter(name__icontains=search)
         if city:
             queryset = queryset.filter(city__iexact=city)
+
+        if sports_type:
+            queryset = queryset.filter(
+                courts__sports_type__iexact=sports_type
+            ).distinct()
 
         if min_price or max_price:
             court_filter = Court.objects.filter(turf__in=queryset)
@@ -74,6 +79,7 @@ class TurfListView(APIView):
             
             if max_price:
                 court_filter = court_filter.filter(price__lte=max_price)
+        
             queryset = queryset.filter(id__in=court_filter.values("turf_id"))
 
         lat = request.query_params.get("lat")

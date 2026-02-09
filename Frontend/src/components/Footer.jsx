@@ -26,17 +26,17 @@ export default function Footer() {
             </h4>
             <ul className="space-y-1">
               <li>
-                <Link to="/turfs" className="hover:text-white">
+                <Link to="/turfs" className="hover:text-green-500">
                   Explore turfs
                 </Link>
               </li>
               <li>
-                <Link to="/my-bookings" className="hover:text-white">
+                <Link to="/my-bookings" className="hover:text-green-500">
                   My bookings
                 </Link>
               </li>
               <li>
-                <Link to="/owner/turfs" className="hover:text-white">
+                <Link to="/owner/turfs" className="hover:text-green-500">
                   Owner dashboard
                 </Link>
               </li>
@@ -49,17 +49,17 @@ export default function Footer() {
             </h4>
             <ul className="space-y-1">
               <li>
-                <Link to="/about" className="hover:text-white">
+                <Link to="/about" className="hover:text-green-500">
                   About
                 </Link>
               </li>
               <li>
-                <Link to="/contact" className="hover:text-white">
+                <Link to="/contact" className="hover:text-green-500">
                   Contact
                 </Link>
               </li>
               <li>
-                <Link to="/popular-turfs" className="hover:text-white">
+                <Link to="/popular-turfs" className="hover:text-green-500">
                   Popular turfs
                 </Link>
               </li>
@@ -74,17 +74,17 @@ export default function Footer() {
                 Frontend ready to link to legal pages. */}
             <ul className="space-y-1">
               <li>
-                <Link to="/" className="hover:text-white">
+                <Link to="/" className="hover:text-green-500">
                   Terms &amp; conditions
                 </Link>
               </li>
               <li>
-                <Link to="/" className="hover:text-white">
+                <Link to="/" className="hover:text-green-500">
                   Privacy policy
                 </Link>
               </li>
               <li>
-                <Link to="/" className="hover:text-white">
+                <Link to="/" className="hover:text-green-500">
                   Refund policy
                 </Link>
               </li>

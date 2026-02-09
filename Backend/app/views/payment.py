@@ -91,7 +91,7 @@ class CreateRazorpayOrderView(APIView):
             "currency": "INR",
             "prefill": {
                 "name": booking.user.name or "",
-                "phone": booking.user.phone_no or "",
+                "contact": booking.user.phone_no or "",
             }
         })
 
