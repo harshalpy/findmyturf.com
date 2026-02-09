@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../api";
 import { ListShimmerGrid, TurfCardShimmer, StatCardShimmer } from "../../components/Shimmers";
-import Button from "../../components/ui/Button";
+import Button from "../../components/ui/button";
 import { Link } from "react-router-dom";
 export default function MyTurfs() {
   const navigate = useNavigate();

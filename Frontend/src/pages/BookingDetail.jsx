@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import api from "../api";
 import { CourtCardShimmer } from "../components/Shimmers";
-import Button from "../components/ui/Button.jsx";
+import Button from "../components/ui/button.jsx";
 import useRazorpayPayment from "../hooks/useRazorpayPayment.jsx";
 import { cancelBooking as cancelBookingApi } from "../booking.api.js";
 
