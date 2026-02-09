@@ -56,7 +56,7 @@ export default function SportsCategories() {
       <img
         src="https://images.pexels.com/photos/2570139/pexels-photo-2570139.jpeg?auto=compress&cs=tinysrgb&w=1600"
         alt="Sports turf"
-        className="absolute inset-0 h-full w-full object-cover "
+        className="absolute inset-0 h-full w-full object-cover"
       />
 
       {/* OVERLAY */}

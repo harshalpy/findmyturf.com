@@ -1,10 +1,18 @@
 export default function Contact() {
   return (
-    <div className="min-h-screen bg-[url('https://images.pexels.com/photos/2570139/pexels-photo-2570139.jpeg?auto=compress&cs=tinysrgb&w=1600')] bg-fixed bg-cover bg-center bg-no-repeat">
-      <div className="min-h-screen bg-slate-950/60 px-4 py-10 sm:px-6">
-      <div className="mx-auto grid max-w-5xl grid-cols-5 gap-8 items-start">
-          <div className="col-span-3 space-y-5 rounded-xl bg-white/10 p-6 shadow-xl backdrop-blur-lg border border-white/20">
+    <div className="relative h-screen w-full overflow-hidden bg-[url('https://images.pexels.com/photos/2570139/pexels-photo-2570139.jpeg?auto=compress&cs=tinysrgb&w=1600')] bg-cover bg-center bg-no-repeat md:bg-fixed">
+
+      {/* OVERLAY */}
+      <div className="absolute inset-0 bg-slate-950/60" />
+
+      {/* CONTENT */}
+      <div className="relative z-10 h-full overflow-y-auto px-4 py-10 sm:px-6 lg:px-8">
+        <div className="mx-auto grid max-w-5xl grid-cols-1 gap-8 md:grid-cols-5 items-start">
+
+          {/* CONTACT FORM */}
+          <div className="space-y-5 rounded-xl bg-white/10 p-6 shadow-xl backdrop-blur-lg border border-white/20 md:col-span-3">
             <h1 className="text-2xl font-bold text-white">Contact us</h1>
+
             <p className="text-sm text-slate-200">
               Have questions about bookings, turfs or partnerships? Send us a
               message and we&apos;ll get back to you.
@@ -37,19 +45,19 @@ export default function Contact() {
                 />
               </div>
 
-              {/* TODO: Backend support required
-                  Frontend ready to submit contact form */}
               <button
                 type="button"
-                className="w-full rounded-lg bg-emerald-500 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-emerald-600"
+                className="w-full rounded-lg bg-emerald-500 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-600"
               >
                 Send message
               </button>
             </form>
           </div>
 
-          <div className="col-span-2 space-y-4 rounded-xl bg-slate-950/70 p-6 text-slate-50 shadow-md">
+          {/* SUPPORT INFO */}
+          <div className="space-y-4 rounded-xl bg-slate-950/70 p-6 text-slate-50 shadow-md md:col-span-2">
             <h2 className="text-lg font-semibold">Support &amp; partnerships</h2>
+
             <p className="text-sm text-slate-300">
               For urgent booking issues, reach out via WhatsApp or call. For
               business and turf onboarding, email our partnerships team.
@@ -68,6 +76,7 @@ export default function Contact() {
               </p>
             </div>
           </div>
+
         </div>
       </div>
     </div>

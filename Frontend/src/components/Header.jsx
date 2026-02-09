@@ -42,7 +42,7 @@ export default function Header() {
         </button>
 
         {/* DESKTOP NAV */}
-        <nav className="hidden items-center gap-6 text-sm font-medium text-slate-600 md:flex">
+        <nav className="hidden items-center gap-6 text-sm font-medium text-slate-600 lg:flex">
           {primaryNav.map((item) => (
             <Link
               key={item.to}
@@ -55,7 +55,7 @@ export default function Header() {
         </nav>
 
         {/* ACTIONS */}
-        <div className="hidden items-center gap-3 md:flex">
+        <div className="hidden items-center gap-3 lg:flex">
           {!token && (
             <>
               
@@ -107,7 +107,7 @@ export default function Header() {
         {/* MOBILE TOGGLE */}
         <button
           type="button"
-          className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 text-slate-700 md:hidden"
+          className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 text-slate-700 lg:hidden"
           onClick={() => setOpen((v) => !v)}
         >
           <span className="sr-only">Toggle navigation</span>

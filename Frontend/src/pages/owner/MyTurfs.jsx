@@ -29,8 +29,8 @@ export default function MyTurfs() {
   const openTurfs = turfs.filter((t) => t.is_open).length;
 
   return (
-      <div className="min-h-screen bg-slate-50 px-4 py-10 sm:px-6">
-        <div className="mx-auto max-w-6xl space-y-8">
+    <div className="min-h-screen bg-slate-50 px-4 py-10 sm:px-6">
+      <div className="mx-auto max-w-6xl space-y-8">
 
         {/* HEADER */}
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -109,8 +109,8 @@ export default function MyTurfs() {
             ))}
           </div>
         )}
-        </div>
       </div>
+    </div>
   );
 }
 
@@ -162,41 +162,35 @@ function TurfCard({ turf, navigate }) {
 
         {/* ACTIONS */}
         <div className="grid grid-cols-2 gap-3 pt-2">
-          <button
-            onClick={() =>
-              navigate(`/owner/turf/${turf.id}/courts`)
-            }
-            className="rounded-xl border px-3 py-2 text-xs font-semibold hover:bg-slate-50"
-          >
-            Manage Courts
-          </button>
+  <button
+    onClick={() => navigate(`/owner/turf/${turf.id}/courts`)}
+    className="rounded-xl border border-slate-200 px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50"
+  >
+    Manage Courts
+  </button>
 
-          <button
-            onClick={() =>
-              navigate(`/owner/turf/${turf.id}/bookings`)
-            }
-            className="rounded-xl border px-3 py-2 text-xs font-semibold hover:bg-slate-50"
-          >
-            View Bookings
-          </button>
+  <button
+    onClick={() => navigate(`/owner/turf/${turf.id}/bookings`)}
+    className="rounded-xl border border-slate-200 px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50"
+  >
+    View Bookings
+  </button>
 
-          <button
-            onClick={() =>
-              navigate(`/owner/turf/${turf.id}/edit`)
-            }
-            className="col-span-2 rounded-xl bg-slate-900 py-2 text-xs font-semibold text-white hover:bg-slate-800"
-          >
-            Edit Turf
-          </button>
+  <button
+    onClick={() => navigate(`/owner/turf/${turf.id}/edit`)}
+    className="col-span-2 rounded-xl bg-emerald-500 py-2 text-xs font-semibold text-white hover:bg-emerald-600"
+  >
+    Edit Turf
+  </button>
 
-         <Link
-  to={`/owner/feedbacks?tid=${turf.id}`}
-  className="col-span-2 inline-flex items-center justify-center rounded-xl border px-3 py-2 text-xs font-semibold hover:bg-slate-50"
->
-  Feedback
-</Link>
+  <Link
+    to={`/owner/feedbacks?tid=${turf.id}`}
+    className="col-span-2 inline-flex items-center justify-center rounded-xl border border-slate-200 px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50"
+  >
+    Feedback
+  </Link>
+</div>
 
-        </div>
       </div>
     </div>
   );

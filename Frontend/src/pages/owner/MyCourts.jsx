@@ -66,7 +66,7 @@ export default function MyCourts() {
             onClick={() =>
               navigate(`/owner/turf/${turfId}/courts/add`)
             }
-            className="rounded-xl bg-slate-900 px-5 py-2 text-sm font-semibold text-white hover:bg-slate-800"
+            className="rounded-xl bg-emerald-500 px-5 py-2 text-sm font-semibold text-white hover:bg-emerald-600"
           >
             + Add Court
           </button>
